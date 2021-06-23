@@ -6,9 +6,9 @@ using AutoMapper;
 
 namespace PublicWorkflow.Application.Mappings
 {
-    internal class BrandProfile : Profile
+    internal class ProcessProfile : Profile
     {
-        public BrandProfile()
+        public ProcessProfile()
         {
             CreateMap<CreateBrandCommand, Brand>().ReverseMap();
             CreateMap<GetBrandByIdResponse, Brand>().ReverseMap();

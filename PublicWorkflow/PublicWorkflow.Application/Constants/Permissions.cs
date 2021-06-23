@@ -23,12 +23,12 @@ namespace PublicWorkflow.Application.Constants
             public const string Delete = "Permissions.Dashboard.Delete";
         }
 
-        public static class Products
+        public static class Process
         {
-            public const string View = "Permissions.Products.View";
-            public const string Create = "Permissions.Products.Create";
-            public const string Edit = "Permissions.Products.Edit";
-            public const string Delete = "Permissions.Products.Delete";
+            public const string View = "Permissions.Process.View";
+            public const string Create = "Permissions.Process.Create";
+            public const string Edit = "Permissions.Process.Edit";
+            public const string Delete = "Permissions.Process.Delete";
         }
 
         public static class Users
@@ -39,12 +39,12 @@ namespace PublicWorkflow.Application.Constants
             public const string Delete = "Permissions.Users.Delete";
         }
 
-        public static class Brands
+        public static class Approval
         {
-            public const string View = "Permissions.Brands.View";
-            public const string Create = "Permissions.Brands.Create";
-            public const string Edit = "Permissions.Brands.Edit";
-            public const string Delete = "Permissions.Brands.Delete";
+            public const string View = "Permissions.Approval.View";
+            public const string Create = "Permissions.Approval.Create";
+            public const string Edit = "Permissions.Approval.Edit";
+            public const string Delete = "Permissions.Approval.Delete";
         }
     }
 }

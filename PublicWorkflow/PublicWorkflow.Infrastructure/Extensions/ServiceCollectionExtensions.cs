@@ -1,7 +1,6 @@
-﻿using PublicWorkflow.Application.Interfaces.CacheRepositories;
+﻿
 using PublicWorkflow.Application.Interfaces.Contexts;
 using PublicWorkflow.Application.Interfaces.Repositories;
-using PublicWorkflow.Infrastructure.CacheRepositories;
 using PublicWorkflow.Infrastructure.DbContexts;
 using PublicWorkflow.Infrastructure.Repositories;
 using AutoMapper;
@@ -24,10 +23,6 @@ namespace PublicWorkflow.Infrastructure.Extensions
             #region Repositories
 
             services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
-            services.AddTransient<IProductRepository, ProductRepository>();
-            services.AddTransient<IProductCacheRepository, ProductCacheRepository>();
-            services.AddTransient<IBrandRepository, BrandRepository>();
-            services.AddTransient<IBrandCacheRepository, BrandCacheRepository>();
             services.AddTransient<ILogRepository, LogRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 

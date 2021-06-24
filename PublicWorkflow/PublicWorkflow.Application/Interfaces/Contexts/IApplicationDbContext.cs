@@ -16,6 +16,12 @@ namespace PublicWorkflow.Application.Interfaces.Contexts
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
-        DbSet<Product> Products { get; set; }
+        DbSet<History> History { get; set; }
+        DbSet<Process> Process { get; set; }
+        DbSet<Approval> Approval { get; set; }
+        DbSet<ApprovalConfig> ApprovalConfig { get; set; }
+        DbSet<Organization> Organization { get; set; }
+        DbSet<OrganizationUser> OrganizationUser { get; set; }
+        DbSet<ProcessConfig> ProcessConfig { get; set; }
     }
 }

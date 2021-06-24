@@ -22,7 +22,13 @@ namespace PublicWorkflow.Infrastructure.DbContexts
             _authenticatedUser = authenticatedUser;
         }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<History> History { get; set; }
+        public DbSet<Process> Process { get; set; }
+        public DbSet<Approval> Approval { get; set; }
+        public DbSet<ApprovalConfig> ApprovalConfig { get; set; }
+        public DbSet<Organization> Organization { get; set; }
+        public DbSet<OrganizationUser> OrganizationUser { get; set; }
+        public DbSet<ProcessConfig> ProcessConfig { get; set; }
 
         public IDbConnection Connection => Database.GetDbConnection();
 
@@ -63,6 +69,9 @@ namespace PublicWorkflow.Infrastructure.DbContexts
             {
                 property.SetColumnType("decimal(18,2)");
             }
+            builder.ApplyConfiguration(new ProcessConfiguration());
+            builder.ApplyConfiguration(new ApprovalconfigConfiguration());
+            builder.ApplyConfiguration(new ApprovalConfiguration());
             base.OnModelCreating(builder);
         }
     }

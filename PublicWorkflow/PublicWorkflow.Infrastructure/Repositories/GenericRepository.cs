@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Application.Interfaces.Shared;
 using PublicWorkflow.Domain.Entities.Catalog;
 using PublicWorkflow.Infrastructure.DbContexts;
 using PublicWorkflow.Infrastructure.Identity.Models;
@@ -14,10 +15,10 @@ namespace PublicWorkflow.Infrastructure.Repositories
     public class GenericRepository<T> : IGenericRepository<T> where T : AuditableExt
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ApplicationUser _user;
+        private readonly IAuthenticatedUserService _user;
         private IQueryable<T> Entity;
 
-        public GenericRepository(ApplicationDbContext dbContext, ApplicationUser user)
+        public GenericRepository(ApplicationDbContext dbContext, IAuthenticatedUserService user)
         {
             _dbContext = dbContext;
             _user = user;
@@ -31,7 +32,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
             {
                 entity.IsDeleted = true;
                 entity.LastModifiedOn = DateTime.Now;
-                entity.LastModifiedBy = _user?.Id;
+                entity.LastModifiedBy = _user?.Username;
             }
             else
             {
@@ -124,7 +125,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
 
         public async Task<long> AddAsync(T entity)
         {
-            entity.CreatedBy = _user?.Id.ToString();
+            entity.CreatedBy = _user?.Username;
             entity.CreatedOn = DateTime.Now;
             await _dbContext.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
@@ -135,7 +136,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
         {
             entities.ForEach(a =>
             {
-                a.CreatedBy = _user?.Id.ToString();
+                a.CreatedBy = _user?.Username;
                 a.CreatedOn = DateTime.Now;
             });
             await _dbContext.AddRangeAsync(entities);
@@ -144,7 +145,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
 
         public async Task<bool> UpdateAsync(T entity)
         {
-            entity.LastModifiedBy = _user?.Id.ToString();
+            entity.LastModifiedBy = _user?.Username;
             entity.LastModifiedOn = DateTime.Now;
             _dbContext.Update(entity);
             return await _dbContext.SaveChangesAsync() > 0;
@@ -154,7 +155,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
         {
             entities.ForEach(a =>
             {
-                a.LastModifiedBy = _user?.Id.ToString();
+                a.LastModifiedBy = _user?.Username;
                 a.LastModifiedOn = DateTime.Now;
             });
             _dbContext.UpdateRange(entities);

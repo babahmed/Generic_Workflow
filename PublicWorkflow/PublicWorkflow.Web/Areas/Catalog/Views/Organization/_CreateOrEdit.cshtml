@@ -1,7 +1,7 @@
 ﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 @using PublicWorkflow.Web.Areas.Catalog.Models
-@model BrandViewModel
-<form id="create-form" method="post" asp-controller="Brand" asp-action="OnPostCreateOrEdit" asp-route-id="@Model.Id" onsubmit="return jQueryModalPost(this);" enctype="multipart/form-data">
+@model OrganizationViewModel
+<form id="create-form" method="post" asp-controller="Organization" asp-action="OnPostCreateOrEdit" asp-route-id="@Model.Id" onsubmit="return jQueryModalPost(this);" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-12">
             <div class="form-group row">
@@ -9,13 +9,6 @@
                 <div class="col-md-9">
                     <input type="text" asp-for="Name" name="Name" class="form-control">
                     <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-md-3 col-form-label">@localizer["Tax"]</label>
-                <div class="col-md-9">
-                    <input type="text" asp-for="Tax" name="Tax" class="form-control">
-                    <span asp-validation-for="Tax" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">

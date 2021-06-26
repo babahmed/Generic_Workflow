@@ -46,5 +46,19 @@ namespace PublicWorkflow.Application.Constants
             public const string Edit = "Permissions.Approval.Edit";
             public const string Delete = "Permissions.Approval.Delete";
         }
+        public static class Organization
+        {
+            public const string View = "Permissions.Organization.View";
+            public const string Create = "Permissions.Organization.Create";
+            public const string Edit = "Permissions.Organization.Edit";
+            public const string Delete = "Permissions.Organization.Delete";
+        }
+        public static class Config
+        {
+            public const string View = "Permissions.Config.View";
+            public const string Create = "Permissions.Config.Create";
+            public const string Edit = "Permissions.Config.Edit";
+            public const string Delete = "Permissions.Config.Delete";
+        }
     }
 }

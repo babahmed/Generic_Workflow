@@ -23,6 +23,7 @@ namespace PublicWorkflow.Infrastructure.Extensions
             #region Repositories
 
             services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<ILogRepository, LogRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 

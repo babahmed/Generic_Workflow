@@ -21,6 +21,7 @@ namespace PublicWorkflow.Application.Features.ProcessConfigs.Commands.Update
         public bool? NotifyInitiatorOnApproval { get; set; }
         public bool? AttachApprovalPdf { get; set; }
         public bool? IncludeApproverDetails { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProcessConfigCommand, Result<long>>
         {
@@ -51,6 +52,7 @@ namespace PublicWorkflow.Application.Features.ProcessConfigs.Commands.Update
                     ProcessConfig.NotifyInitiatorOnApproval = command.NotifyInitiatorOnApproval ?? ProcessConfig.NotifyInitiatorOnApproval;
                     ProcessConfig.AttachApprovalPdf = command.AttachApprovalPdf ?? ProcessConfig.AttachApprovalPdf;
                     ProcessConfig.IncludeApproverDetails = command.IncludeApproverDetails ?? ProcessConfig.IncludeApproverDetails;
+                    ProcessConfig.IsDeleted = command.IsDeleted ?? ProcessConfig.IsDeleted;
                     await _ProcessConfigRepository.UpdateAsync(ProcessConfig);
 
                     return Result<long>.Success(ProcessConfig.Id);

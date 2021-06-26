@@ -1,14 +1,14 @@
 ﻿@{
-    ViewData["Title"] = localizer["Products"];
-    ViewData["Caption"] = localizer["Manage Products here"];
+    ViewData["Title"] = localizer["Process Config"];
+    ViewData["Caption"] = localizer["Manage Configs here"];
 }
 @using PublicWorkflow.Web.Areas.Catalog.Models
-@model ProductViewModel
+@model ProcessConfigViewModel
 <div class="card">
     <div class="col-sm-12" style="padding:20px">
-        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Products.Create)).Result.Succeeded)
+        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Config.Create)).Result.Succeeded)
         {
-            <a onclick="jQueryModalGet('/catalog/product/OnGetCreateOrEdit','Create Product')" class="btn bg-success">
+            <a onclick="jQueryModalGet('/catalog/processConfig/OnGetCreateOrEdit','Create Process Config')" class="btn bg-success">
                 <i class="fa fa-plus-square"></i> Create
             </a>
         }
@@ -26,14 +26,14 @@
     <script src="~/js/site.js"></script>
     <script>
         $(document).ready(function () {
-            $("#productTable").DataTable();
+            $("#processConfigTable").DataTable();
             loadData();
             $('#reload').on('click', function () {
                 loadData();
             });
         });
         function loadData() {
-            $('#viewAll').load('/catalog/product/LoadAll');
+            $('#viewAll').load('/catalog/processConfig/LoadAll');
         }
     </script>
 }

@@ -76,8 +76,8 @@ namespace PublicWorkflow.Web.Extensions
             }
             else
             {
-                services.AddDbContext<IdentityContext>(options => options.UseSqlServer(configuration.GetConnectionString("IdentityConnection")));
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("ApplicationConnection")));
+                services.AddDbContext<IdentityContext>(options => options.UseNpgsql(configuration.GetConnectionString("IdentityConnection")));
+                services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("ApplicationConnection")));
             }
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {

@@ -47,6 +47,7 @@ namespace PublicWorkflow.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseDatabaseMigrations();
             app.ConfigureSwagger();
             app.UseHttpsRedirection();
             app.UseMiddleware<ErrorHandlerMiddleware>();

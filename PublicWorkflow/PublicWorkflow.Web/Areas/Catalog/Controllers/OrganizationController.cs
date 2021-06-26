@@ -1,13 +1,13 @@
-﻿using PublicWorkflow.Application.Features.Brands.Commands.Create;
-using PublicWorkflow.Application.Features.Brands.Commands.Delete;
-using PublicWorkflow.Application.Features.Brands.Commands.Update;
-using PublicWorkflow.Application.Features.Brands.Queries.GetAllCached;
-using PublicWorkflow.Application.Features.Brands.Queries.GetById;
+﻿
 using PublicWorkflow.Web.Abstractions;
 using PublicWorkflow.Web.Areas.Catalog.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PublicWorkflow.Application.Features.Queries.GetAll;
+using PublicWorkflow.Application.Features.Queries.GetById;
+using PublicWorkflow.Application.Features.Commands.Create;
+using PublicWorkflow.Application.Features.Commands.Update;
 
 namespace PublicWorkflow.Web.Areas.Catalog.Controllers
 {
@@ -16,16 +16,16 @@ namespace PublicWorkflow.Web.Areas.Catalog.Controllers
     {
         public IActionResult Index()
         {
-            var model = new BrandViewModel();
+            var model = new OrganizationViewModel();
             return View(model);
         }
 
         public async Task<IActionResult> LoadAll()
         {
-            var response = await _mediator.Send(new GetAllBrandsCachedQuery());
+            var response = await _mediator.Send(new GetAllOrganizationQuery(null,1,1000));
             if (response.Succeeded)
             {
-                var viewModel = _mapper.Map<List<BrandViewModel>>(response.Data);
+                var viewModel = _mapper.Map<List<OrganizationViewModel>>(response.Data);
                 return PartialView("_ViewAll", viewModel);
             }
             return null;
@@ -33,51 +33,51 @@ namespace PublicWorkflow.Web.Areas.Catalog.Controllers
 
         public async Task<JsonResult> OnGetCreateOrEdit(int id = 0)
         {
-            var brandsResponse = await _mediator.Send(new GetAllBrandsCachedQuery());
+            var brandsResponse = await _mediator.Send(new GetAllOrganizationQuery(null, 1, 1000));
 
             if (id == 0)
             {
-                var brandViewModel = new BrandViewModel();
-                return new JsonResult(new { isValid = true, html = await _viewRenderer.RenderViewToStringAsync("_CreateOrEdit", brandViewModel) });
+                var organizationViewModel = new OrganizationViewModel();
+                return new JsonResult(new { isValid = true, html = await _viewRenderer.RenderViewToStringAsync("_CreateOrEdit", organizationViewModel) });
             }
             else
             {
-                var response = await _mediator.Send(new GetProcessConfigByIdQuery() { Id = id });
+                var response = await _mediator.Send(new GetOrganizationByIdQuery() { Id = id });
                 if (response.Succeeded)
                 {
-                    var brandViewModel = _mapper.Map<BrandViewModel>(response.Data);
-                    return new JsonResult(new { isValid = true, html = await _viewRenderer.RenderViewToStringAsync("_CreateOrEdit", brandViewModel) });
+                    var organizationViewModel = _mapper.Map<OrganizationViewModel>(response.Data);
+                    return new JsonResult(new { isValid = true, html = await _viewRenderer.RenderViewToStringAsync("_CreateOrEdit", organizationViewModel) });
                 }
                 return null;
             }
         }
 
         [HttpPost]
-        public async Task<JsonResult> OnPostCreateOrEdit(int id, BrandViewModel brand)
+        public async Task<JsonResult> OnPostCreateOrEdit(long id, OrganizationViewModel org)
         {
             if (ModelState.IsValid)
             {
                 if (id == 0)
                 {
-                    var createBrandCommand = _mapper.Map<CreateBrandCommand>(brand);
+                    var createBrandCommand = _mapper.Map<CreateOrganizationCommand>(org);
                     var result = await _mediator.Send(createBrandCommand);
                     if (result.Succeeded)
                     {
                         id = result.Data;
-                        _notify.Success($"Brand with ID {result.Data} Created.");
+                        _notify.Success($"Organization with ID {result.Data} Created.");
                     }
                     else _notify.Error(result.Message);
                 }
                 else
                 {
-                    var updateBrandCommand = _mapper.Map<UpdateBrandCommand>(brand);
-                    var result = await _mediator.Send(updateBrandCommand);
-                    if (result.Succeeded) _notify.Information($"Brand with ID {result.Data} Updated.");
+                    var updateOrganizationCommand = _mapper.Map<UpdateOrganizationCommand>(org);
+                    var result = await _mediator.Send(updateOrganizationCommand);
+                    if (result.Succeeded) _notify.Information($"Organization with ID {result.Data} Updated.");
                 }
-                var response = await _mediator.Send(new GetAllBrandsCachedQuery());
+                var response = await _mediator.Send(new GetAllOrganizationQuery(null, 1, 1000));
                 if (response.Succeeded)
                 {
-                    var viewModel = _mapper.Map<List<BrandViewModel>>(response.Data);
+                    var viewModel = _mapper.Map<List<OrganizationViewModel>>(response.Data);
                     var html = await _viewRenderer.RenderViewToStringAsync("_ViewAll", viewModel);
                     return new JsonResult(new { isValid = true, html = html });
                 }
@@ -89,7 +89,7 @@ namespace PublicWorkflow.Web.Areas.Catalog.Controllers
             }
             else
             {
-                var html = await _viewRenderer.RenderViewToStringAsync("_CreateOrEdit", brand);
+                var html = await _viewRenderer.RenderViewToStringAsync("_CreateOrEdit", org);
                 return new JsonResult(new { isValid = false, html = html });
             }
         }
@@ -97,14 +97,14 @@ namespace PublicWorkflow.Web.Areas.Catalog.Controllers
         [HttpPost]
         public async Task<JsonResult> OnPostDelete(int id)
         {
-            var deleteCommand = await _mediator.Send(new DeleteBrandCommand { Id = id });
+            var deleteCommand = await _mediator.Send(new UpdateOrganizationCommand { Id = id, IsDeleted=true });
             if (deleteCommand.Succeeded)
             {
-                _notify.Information($"Brand with Id {id} Deleted.");
-                var response = await _mediator.Send(new GetAllBrandsCachedQuery());
+                _notify.Information($"Organization with Id {id} Deleted.");
+                var response = await _mediator.Send(new GetAllOrganizationQuery(null, 1, 1000));
                 if (response.Succeeded)
                 {
-                    var viewModel = _mapper.Map<List<BrandViewModel>>(response.Data);
+                    var viewModel = _mapper.Map<List<OrganizationViewModel>>(response.Data);
                     var html = await _viewRenderer.RenderViewToStringAsync("_ViewAll", viewModel);
                     return new JsonResult(new { isValid = true, html = html });
                 }

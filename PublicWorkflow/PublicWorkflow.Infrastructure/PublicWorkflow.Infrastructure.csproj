@@ -16,6 +16,7 @@
     <PackageReference Include="MimeKit" Version="2.10.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="4.2.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.1" />
@@ -29,6 +30,7 @@
     <ProjectReference Include="..\PublicWorkflow.Domain\PublicWorkflow.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Migrations\ApplicationDb\" />
     <Folder Include="Services\" />
   </ItemGroup>
 </Project>

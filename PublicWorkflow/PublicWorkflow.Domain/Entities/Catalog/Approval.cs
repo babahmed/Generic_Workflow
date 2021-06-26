@@ -16,7 +16,8 @@ namespace PublicWorkflow.Domain.Entities.Catalog
         public DateTime? Actioned { get; set; }
         public long ProcessId { get; set; }
         public Process Process { get; set; }
-        public string[] EligibleApprover { get; set; }
+        public long ApprovalconfigId { get; set; }
+        public ApprovalConfig ApprovalConfig { get; set; }
         public string[] AlreadyApproved { get; set; }
         public string[] Comments { get; set; }
     }

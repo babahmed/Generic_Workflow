@@ -34,13 +34,6 @@ namespace PublicWorkflow.Infrastructure.DbContexts
     {
         public void Configure(EntityTypeBuilder<Approval> builder)
         {
-
-            builder
-            .Property(e => e.EligibleApprover)
-            .HasConversion(
-                v => string.Join('/', v),
-                v => v.Split('/', StringSplitOptions.RemoveEmptyEntries));
-
             builder
             .Property(e => e.AlreadyApproved)
             .HasConversion(

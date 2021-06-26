@@ -42,7 +42,7 @@ namespace PublicWorkflow.Web.Areas.Catalog.Controllers
             }
             else
             {
-                var response = await _mediator.Send(new GetBrandByIdQuery() { Id = id });
+                var response = await _mediator.Send(new GetProcessConfigByIdQuery() { Id = id });
                 if (response.Succeeded)
                 {
                     var brandViewModel = _mapper.Map<BrandViewModel>(response.Data);

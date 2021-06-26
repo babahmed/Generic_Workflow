@@ -14,8 +14,6 @@ namespace PublicWorkflow.Domain.Entities.Catalog
         public ProcessConfig ProcessConfig { get; set; }
         public int Level { get; set; }
         public int RequiredApprovers { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime? Updated { get; set; }
         public string[] Approvers { get; set; }
         public virtual ICollection<Approval> Approvals { get; set; }
     }

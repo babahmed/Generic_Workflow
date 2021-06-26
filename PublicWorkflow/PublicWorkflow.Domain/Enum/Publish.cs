@@ -8,6 +8,6 @@ namespace PublicWorkflow.Domain.Enum
 {
     public enum Publish
     {
-        Image = 0, Word, Pdf
+        None = 0, MailOnly,GetOnly, PostOnly,GetMail,PostMail
     }
 }

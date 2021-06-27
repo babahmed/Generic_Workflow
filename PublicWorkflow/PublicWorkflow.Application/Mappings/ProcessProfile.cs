@@ -12,17 +12,13 @@ namespace PublicWorkflow.Application.Mappings
 {
     internal class ProcessProfile : Profile
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public ProcessProfile(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
 
-            var OrgId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c=>c.Type.Contains("OrganizationId"));
+        public ProcessProfile()
+        {
 
             #region ProcessConfig
 
             CreateMap<CreateProcessConfigCommand, ProcessConfig>()
-            .ForMember(dest => dest.OrganizationId, opt => opt.MapFrom(src => long.Parse(OrgId.Value)))
             .ReverseMap();
 
             CreateMap<GetAllProcessConfigResponse, ProcessConfig>().ReverseMap();

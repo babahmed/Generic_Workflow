@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
     <PackageReference Include="FluentValidation" Version="9.3.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
     <PackageReference Include="AspNetCoreHero.Extensions.Logging" Version="1.0.0" />

@@ -37,6 +37,7 @@ namespace PublicWorkflow.Web.Areas.Admin.Controllers
         public async Task<IActionResult> LoadAll()
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
             var allUsersExceptCurrentUser = await _userManager.Users.Where(a => a.Id != currentUser.Id).ToListAsync();
             var model = _mapper.Map<IEnumerable<UserViewModel>>(allUsersExceptCurrentUser);
             return PartialView("_ViewAll", model);

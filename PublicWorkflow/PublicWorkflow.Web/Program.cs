@@ -7,39 +7,72 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using PublicWorkflow.Infrastructure.DbContexts;
+using Serilog;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace PublicWorkflow.Web
 {
     public class Program
     {
-        public async static Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
+            IConfigurationRoot config = new ConfigurationBuilder()
+                 .SetBasePath(Directory.GetCurrentDirectory())
+                 .AddJsonFile("appsettings.json", optional: false)
+                 .Build();
 
-            using (var scope = host.Services.CreateScope())
+            string logurl = config.GetValue<string>("logurl");
+            string ApplicationName = config.GetValue<string>("ApplicationName");
+
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+            .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("Service", ApplicationName)
+            .WriteTo.Seq(logurl)
+            .CreateLogger();
+
+            try
             {
-                var services = scope.ServiceProvider;
-                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-                var logger = loggerFactory.CreateLogger("app");
-                try
-                {
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var host = CreateHostBuilder(args).Build();
 
-                    await Infrastructure.Identity.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
-                    await Infrastructure.Identity.Seeds.DefaultSuperAdminUser.SeedAsync(userManager, roleManager);
-                    await Infrastructure.Identity.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
-                    logger.LogInformation("Finished Seeding Default Data");
-                    logger.LogInformation("Application Starting");
-                }
-                catch (Exception ex)
+                using (var scope = host.Services.CreateScope())
                 {
-                    logger.LogWarning(ex, "An error occurred seeding the DB");
+                    var services = scope.ServiceProvider;
+                    services.GetService<IdentityContext>().Database.Migrate();
+                    try
+                    {
+                        Serilog.Log.Information($"Attempting to seed data");
+
+                        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                        await Infrastructure.Identity.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
+                        await Infrastructure.Identity.Seeds.DefaultSuperAdminUser.SeedAsync(userManager, roleManager);
+                        await Infrastructure.Identity.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
+                        Serilog.Log.Information("Finished Seeding Default Data");
+                        Serilog.Log.Information($"Starting up {ApplicationName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Warning(ex, "An error occurred seeding the DB");
+                    }
                 }
+                host.Run();
             }
-            host.Run();
-        }
+            catch (Exception ex)
+            {
+                Serilog.Log.Fatal<Exception>($"Application {ApplicationName} start-up failed", ex);
+            }
+            finally
+            {
+                Serilog.Log.CloseAndFlush();
+            }
 
+        }
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
             .UseSerilog()

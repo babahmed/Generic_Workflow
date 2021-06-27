@@ -12,7 +12,7 @@ using PublicWorkflow.Application.Features.Commands.Update;
 namespace PublicWorkflow.Web.Areas.Catalog.Controllers
 {
     [Area("Catalog")]
-    public class BrandController : BaseController<BrandController>
+    public class OrganizationController : BaseController<OrganizationController>
     {
         public IActionResult Index()
         {

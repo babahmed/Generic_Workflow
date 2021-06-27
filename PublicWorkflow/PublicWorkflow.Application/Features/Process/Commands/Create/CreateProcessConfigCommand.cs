@@ -6,6 +6,8 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using PublicWorkflow.Domain.Enum;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace PublicWorkflow.Application.Features.Commands.Create
 {
@@ -28,16 +30,23 @@ namespace PublicWorkflow.Application.Features.Commands.Create
     {
         private readonly IGenericRepository<ProcessConfig> _ProcessConfigRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateProcessConfigCommandHandler(IGenericRepository<ProcessConfig> ProcessConfigRepository, IMapper mapper)
+        public CreateProcessConfigCommandHandler(
+            IGenericRepository<ProcessConfig> ProcessConfigRepository,
+            IHttpContextAccessor httpContextAccessor,
+            IMapper mapper)
         {
             _ProcessConfigRepository = ProcessConfigRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         public async Task<Result<long>> Handle(CreateProcessConfigCommand request, CancellationToken cancellationToken)
         {
             var config = _mapper.Map<ProcessConfig>(request);
+            config.OrganizationId= long.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Contains("OrganizationId")).Value);
             await _ProcessConfigRepository.AddAsync(config);
 
             return Result<long>.Success(config.Id);

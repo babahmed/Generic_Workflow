@@ -1,7 +1,6 @@
 ﻿using PublicWorkflow.Application.Interfaces.Repositories;
 using PublicWorkflow.Domain.Entities.Catalog;
 using AspNetCoreHero.Results;
-using AutoMapper;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

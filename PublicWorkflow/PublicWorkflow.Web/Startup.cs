@@ -57,6 +57,16 @@ namespace PublicWorkflow.Web
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IViewRenderService, ViewRenderService>();
+
+            services.AddAuthentication()
+               .AddGoogle(options =>
+               {
+                   IConfigurationSection googleAuthNSection =
+                       _configuration.GetSection("Authentication:Google");
+
+                   options.ClientId = googleAuthNSection["ClientId"];
+                   options.ClientSecret = googleAuthNSection["ClientSecret"];
+               });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,6 +90,8 @@ namespace PublicWorkflow.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

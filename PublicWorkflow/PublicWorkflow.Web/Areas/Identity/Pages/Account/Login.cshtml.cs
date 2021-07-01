@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace PublicWorkflow.Web.Areas.Identity.Pages.Account
 {
@@ -140,7 +141,7 @@ namespace PublicWorkflow.Web.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
-        }
+        }       
 
         public bool IsValidEmail(string emailaddress)
         {

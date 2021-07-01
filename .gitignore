@@ -56,6 +56,9 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# Development
+appsettings.Development.json
+
 # StyleCop
 StyleCopReport.xml
 

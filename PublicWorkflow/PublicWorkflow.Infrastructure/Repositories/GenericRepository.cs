@@ -3,7 +3,6 @@ using PublicWorkflow.Application.Interfaces.Repositories;
 using PublicWorkflow.Application.Interfaces.Shared;
 using PublicWorkflow.Domain.Entities.Catalog;
 using PublicWorkflow.Infrastructure.DbContexts;
-using PublicWorkflow.Infrastructure.Identity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

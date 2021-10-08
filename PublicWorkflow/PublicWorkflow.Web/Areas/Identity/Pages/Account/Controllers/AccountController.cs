@@ -48,7 +48,8 @@ namespace PublicWorkflow.Web.Areas.Account.Controllers
             if (info == null)
                 return LocalRedirect("/Identity/Account/Login");
 
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);            if (result.Succeeded)
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);            
+            if (result.Succeeded)
             {
                 var usr = await _userManager.FindByNameAsync(info.Principal.FindFirst(ClaimTypes.Email).Value);
                 await _mediator.Send(new AddActivityLogCommand() { userId = usr.Id, Action = "Logged In" });

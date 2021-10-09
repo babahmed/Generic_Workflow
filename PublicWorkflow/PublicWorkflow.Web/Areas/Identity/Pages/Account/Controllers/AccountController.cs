@@ -48,11 +48,11 @@ namespace PublicWorkflow.Web.Areas.Account.Controllers
             if (info == null)
                 return LocalRedirect("/Identity/Account/Login");
 
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
-            //string[] userInfo = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);            
             if (result.Succeeded)
             {
-                //await _mediator.Send(new AddActivityLogCommand() { userId = result., Action = "Logged In" });
+                var usr = await _userManager.FindByNameAsync(info.Principal.FindFirst(ClaimTypes.Email).Value);
+                await _mediator.Send(new AddActivityLogCommand() { userId = usr.Id, Action = "Logged In" });
                 _logger.LogInformation("User logged in.");
                 _notify.Success($"Logged in as {info.Principal.FindFirst(ClaimTypes.Name).Value}.");
                 return LocalRedirect(returnUrl);
@@ -66,7 +66,8 @@ namespace PublicWorkflow.Web.Areas.Account.Controllers
                     UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
                     FirstName = info.Principal.FindFirst(ClaimTypes.GivenName).Value,
                     LastName = info.Principal.FindFirst(ClaimTypes.Surname).Value,
-                    EmailConfirmed=true
+                    EmailConfirmed=true,
+                    IsActive = true
                 };
 
                 IdentityResult identResult = await _userManager.CreateAsync(user);

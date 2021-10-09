@@ -14,13 +14,7 @@ namespace PublicWorkflow.Application.Features.ProcessConfigs.Commands.Update
         public string Name { get; set; }
         public string Description { get; set; }
         public int? RequiredApprovalLevels { get; set; }
-        public Publish? PublishType { get; set; }
         public string FeedBackUrl { get; set; }
-        public bool? SingleRejection { get; set; }
-        public bool? NotifyAllApproverOnApproval { get; set; }
-        public bool? NotifyInitiatorOnApproval { get; set; }
-        public bool? AttachApprovalPdf { get; set; }
-        public bool? IncludeApproverDetails { get; set; }
         public bool? IsDeleted { get; set; }
 
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProcessConfigCommand, Result<long>>
@@ -45,13 +39,7 @@ namespace PublicWorkflow.Application.Features.ProcessConfigs.Commands.Update
                     ProcessConfig.Name = command.Name ?? ProcessConfig.Name;
                     ProcessConfig.Description = command.Description ?? ProcessConfig.Description;
                     ProcessConfig.RequiredApprovalLevels = command.RequiredApprovalLevels ?? ProcessConfig.RequiredApprovalLevels;
-                    ProcessConfig.PublishType = command.PublishType ?? ProcessConfig.PublishType;
                     ProcessConfig.FeedBackUrl = command.FeedBackUrl ?? ProcessConfig.FeedBackUrl;
-                    ProcessConfig.SingleRejection = command.SingleRejection ?? ProcessConfig.SingleRejection;
-                    ProcessConfig.NotifyAllApproverOnApproval = command.NotifyAllApproverOnApproval ?? ProcessConfig.NotifyAllApproverOnApproval;
-                    ProcessConfig.NotifyInitiatorOnApproval = command.NotifyInitiatorOnApproval ?? ProcessConfig.NotifyInitiatorOnApproval;
-                    ProcessConfig.AttachApprovalPdf = command.AttachApprovalPdf ?? ProcessConfig.AttachApprovalPdf;
-                    ProcessConfig.IncludeApproverDetails = command.IncludeApproverDetails ?? ProcessConfig.IncludeApproverDetails;
                     ProcessConfig.IsDeleted = command.IsDeleted ?? ProcessConfig.IsDeleted;
                     await _ProcessConfigRepository.UpdateAsync(ProcessConfig);
 

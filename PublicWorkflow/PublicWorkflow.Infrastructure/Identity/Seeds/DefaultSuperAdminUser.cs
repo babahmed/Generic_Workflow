@@ -27,8 +27,8 @@ namespace PublicWorkflow.Infrastructure.Identity.Seeds
         {
             var adminRole = await roleManager.FindByNameAsync("SuperAdmin");
             await roleManager.AddPermissionClaim(adminRole, "Users");
-            await roleManager.AddPermissionClaim(adminRole, "Products");
-            await roleManager.AddPermissionClaim(adminRole, "Brands");
+            await roleManager.AddPermissionClaim(adminRole, "Process");
+            await roleManager.AddPermissionClaim(adminRole, "Jobs");
         }
 
         public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -38,8 +38,8 @@ namespace PublicWorkflow.Infrastructure.Identity.Seeds
             {
                 UserName = "superadmin",
                 Email = "superadmin@gmail.com",
-                FirstName = "Mukesh",
-                LastName = "Murugan",
+                FirstName = "Babat",
+                LastName = "Ahmed",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 IsActive = true

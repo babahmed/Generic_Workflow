@@ -23,5 +23,7 @@ namespace PublicWorkflow.Application.Interfaces.Contexts
         DbSet<Organization> Organization { get; set; }
         DbSet<OrganizationUser> OrganizationUser { get; set; }
         DbSet<ProcessConfig> ProcessConfig { get; set; }
+        DbSet<ProcessRequirement> Requirement { get; set; }
+        DbSet<PublishOption> PublishOption { get; set; }
     }
 }

@@ -8,6 +8,10 @@ namespace PublicWorkflow.Domain.Enum
 {
     public enum Publish
     {
-        None = 0, MailOnly,GetOnly, PostOnly,GetMail,PostMail
+        Mail,
+        Get,
+        Post,
+        Kafka,
+        RabbitMQ
     }
 }

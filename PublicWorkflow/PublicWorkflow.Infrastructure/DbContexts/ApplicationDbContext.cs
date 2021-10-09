@@ -29,6 +29,8 @@ namespace PublicWorkflow.Infrastructure.DbContexts
         public DbSet<Organization> Organization { get; set; }
         public DbSet<OrganizationUser> OrganizationUser { get; set; }
         public DbSet<ProcessConfig> ProcessConfig { get; set; }
+        public DbSet<ProcessRequirement> Requirement { get; set; }
+        public DbSet<PublishOption> PublishOption { get; set; }
 
         public IDbConnection Connection => Database.GetDbConnection();
 

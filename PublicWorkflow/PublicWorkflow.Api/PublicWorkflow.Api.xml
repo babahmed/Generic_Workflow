@@ -11,5 +11,12 @@
             <param name="tokenRequest"></param>
             <returns></returns>
         </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ProcessConfigController.Post(PublicWorkflow.Application.Features.Commands.Create.CreateQuickProcessConfigCommand)">
+            <summary>
+            Quick Config creation
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

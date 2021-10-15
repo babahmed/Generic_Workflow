@@ -14,7 +14,6 @@ namespace PublicWorkflow.Application.Features.ProcessConfigs.Commands.Update
         public string Name { get; set; }
         public string Description { get; set; }
         public int? RequiredApprovalLevels { get; set; }
-        public string FeedBackUrl { get; set; }
         public bool? IsDeleted { get; set; }
 
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProcessConfigCommand, Result<long>>
@@ -39,7 +38,6 @@ namespace PublicWorkflow.Application.Features.ProcessConfigs.Commands.Update
                     ProcessConfig.Name = command.Name ?? ProcessConfig.Name;
                     ProcessConfig.Description = command.Description ?? ProcessConfig.Description;
                     ProcessConfig.RequiredApprovalLevels = command.RequiredApprovalLevels ?? ProcessConfig.RequiredApprovalLevels;
-                    ProcessConfig.FeedBackUrl = command.FeedBackUrl ?? ProcessConfig.FeedBackUrl;
                     ProcessConfig.IsDeleted = command.IsDeleted ?? ProcessConfig.IsDeleted;
                     await _ProcessConfigRepository.UpdateAsync(ProcessConfig);
 

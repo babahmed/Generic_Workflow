@@ -7,6 +7,8 @@ using System.Linq;
 using PublicWorkflow.Application.Features.Queries.GetAllPaged;
 using PublicWorkflow.Application.Features.Queries.GetAll;
 using PublicWorkflow.Application.Features.Queries.GetById;
+using PublicWorkflow.Application.DTOs.ViewModel;
+using System.Collections.Generic;
 
 namespace PublicWorkflow.Application.Mappings
 {
@@ -20,6 +22,8 @@ namespace PublicWorkflow.Application.Mappings
 
             CreateMap<CreateProcessConfigCommand, ProcessConfig>()
             .ReverseMap();
+            CreateMap<CreateQuickProcessConfigCommand, ProcessConfig>()
+.ReverseMap();
 
             CreateMap<GetAllProcessConfigResponse, ProcessConfig>().ReverseMap();
             CreateMap<GetProcessConfigByIdResponse, ProcessConfig>().ReverseMap();
@@ -32,6 +36,8 @@ namespace PublicWorkflow.Application.Mappings
             CreateMap<CreateApprovalConfigCommand, ApprovalConfig>().ReverseMap();
             CreateMap<GetAllApprovalConfigResponse, ApprovalConfig>().ReverseMap();
             CreateMap<GetApprovalConfigByIdResponse, ApprovalConfig>().ReverseMap();
+            CreateMap<ApprovalConfigBase, CreateApprovalConfigCommand>().ReverseMap();
+            CreateMap<List<ApprovalConfigBase>, List<CreateApprovalConfigCommand>>().ReverseMap();
 
             #endregion
 

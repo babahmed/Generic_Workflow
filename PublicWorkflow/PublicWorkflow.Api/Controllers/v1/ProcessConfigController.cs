@@ -1,10 +1,10 @@
-﻿using PublicWorkflow.API.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using PublicWorkflow.API.Controllers;
 using PublicWorkflow.Application.Features.Commands.Create;
 using PublicWorkflow.Application.Features.ProcessConfigs.Commands.Update;
 using PublicWorkflow.Application.Features.Queries.GetAll;
 using PublicWorkflow.Application.Features.Queries.GetById;
+using System.Threading.Tasks;
 
 namespace PublicWorkflow.Api.Controllers.v1
 {
@@ -25,8 +25,19 @@ namespace PublicWorkflow.Api.Controllers.v1
         }
 
         // POST api/<controller>
-        [HttpPost]
+        [HttpPost, Route("Config")]
         public async Task<IActionResult> Post(CreateProcessConfigCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+        
+        /// <summary>
+        /// Quick Config creation
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost,Route("QuickConfig")]
+        public async Task<IActionResult> Post(CreateQuickProcessConfigCommand command)
         {
             return Ok(await _mediator.Send(command));
         }

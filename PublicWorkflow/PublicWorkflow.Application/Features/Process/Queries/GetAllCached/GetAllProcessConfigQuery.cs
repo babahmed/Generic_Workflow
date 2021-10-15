@@ -43,7 +43,6 @@ namespace PublicWorkflow.Application.Features.Queries.GetAll
             var dataQuery = await _processConfig.GetAllAsync(c=>
             (string.IsNullOrEmpty(request.Search)
             || c.Description.ToUpper().Contains(request.Search.ToUpper())
-            || c.FeedBackUrl.ToUpper().Contains(request.Search.ToUpper())
             || c.Name.ToUpper().Contains(request.Search.ToUpper())
             || c.Organization.Name.ToUpper().Contains(request.Search.ToUpper())
             )

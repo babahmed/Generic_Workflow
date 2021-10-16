@@ -30,6 +30,7 @@
     <ProjectReference Include="..\PublicWorkflow.Domain\PublicWorkflow.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ApplicationDb\" />
     <Folder Include="Migrations\ApplicationDb\" />
     <Folder Include="Services\" />
   </ItemGroup>

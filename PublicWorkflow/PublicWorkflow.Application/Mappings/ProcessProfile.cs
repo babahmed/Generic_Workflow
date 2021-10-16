@@ -26,6 +26,7 @@ namespace PublicWorkflow.Application.Mappings
 .ReverseMap();
 
             CreateMap<GetAllProcessConfigResponse, ProcessConfig>().ReverseMap();
+            CreateMap<List<GetAllProcessConfigResponse>, List<ProcessConfig>>().ReverseMap();
             CreateMap<GetProcessConfigByIdResponse, ProcessConfig>().ReverseMap();
 
             #endregion

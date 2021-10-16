@@ -18,6 +18,6 @@ namespace PublicWorkflow.Domain.Entities.Catalog
         public virtual ICollection<PublishOption> PublishConfigs { get; set; }
         public long? OrganizationId{ get; set; }
         public Organization Organization { get; set; }
-        public long? UserId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }

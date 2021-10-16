@@ -6,9 +6,10 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Linq;
 using System.Collections.Generic;
 using PublicWorkflow.Application.DTOs.ViewModel;
+using System;
+using PublicWorkflow.Application.Interfaces.Shared;
 
 namespace PublicWorkflow.Application.Features.Commands.Create
 {
@@ -25,17 +26,20 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         private readonly IGenericRepository<ProcessConfig> _ProcessConfigRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthenticatedUserService _user;
         private readonly IMediator _mediator;
 
         public CreateQuickProcessConfigCommandHandler(
             IGenericRepository<ProcessConfig> ProcessConfigRepository,
             IHttpContextAccessor httpContextAccessor,
             IMediator _mediator,
+            IAuthenticatedUserService _user,
             IMapper mapper)
         {
             _ProcessConfigRepository = ProcessConfigRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            this._mediator = _mediator;
             this._mediator = _mediator;
 
         }
@@ -43,17 +47,17 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         public async Task<Result<long>> Handle(CreateQuickProcessConfigCommand request, CancellationToken cancellationToken)
         {
             var config = _mapper.Map<ProcessConfig>(request);
-            config.OrganizationId= _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Contains("OrganizationId"))!=null?
-            long.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Contains("OrganizationId")).Value):null;
-            config.UserId= _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Contains("UserId")) != null ?
-            long.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Contains("UserId")).Value) : null;
+            config.OrganizationId= _user.OId;
+            config.UserId= _user.UId;
+            config.RequiredApprovalLevels = request.ApprovalLevels.Count;
 
             await _ProcessConfigRepository.AddAsync(config);
 
-            var approvalCommands = _mapper.Map<List<CreateApprovalConfigCommand>>(request.ApprovalLevels);
+            
 
-            foreach (var item in approvalCommands)
+            foreach (var ApprovalItem in request.ApprovalLevels)
             {
+                var item = _mapper.Map<CreateApprovalConfigCommand>(ApprovalItem);
                 item.ProcessConfigId = config.Id;
                 item.Name = $"Level {item.Level}";
                 item.Description = $"Approval at Level {item.Level}";

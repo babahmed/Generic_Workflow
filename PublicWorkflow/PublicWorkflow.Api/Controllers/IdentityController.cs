@@ -32,6 +32,7 @@ namespace PublicWorkflow.Api.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
             var origin = Request.Headers["origin"];

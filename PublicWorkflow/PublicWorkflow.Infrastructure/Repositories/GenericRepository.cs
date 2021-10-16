@@ -31,7 +31,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
             {
                 entity.IsDeleted = true;
                 entity.LastModifiedOn = DateTime.Now;
-                entity.LastModifiedBy = _user?.Username;
+                entity.LastModifiedBy = _user?.UserName;
             }
             else
             {
@@ -124,7 +124,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
 
         public async Task<long> AddAsync(T entity)
         {
-            entity.CreatedBy = _user?.Username;
+            entity.CreatedBy = _user?.UserName;
             entity.CreatedOn = DateTime.Now;
             await _dbContext.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
@@ -135,7 +135,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
         {
             entities.ForEach(a =>
             {
-                a.CreatedBy = _user?.Username;
+                a.CreatedBy = _user?.UserName;
                 a.CreatedOn = DateTime.Now;
             });
             await _dbContext.AddRangeAsync(entities);
@@ -144,7 +144,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
 
         public async Task<bool> UpdateAsync(T entity)
         {
-            entity.LastModifiedBy = _user?.Username;
+            entity.LastModifiedBy = _user?.UserName;
             entity.LastModifiedOn = DateTime.Now;
             _dbContext.Update(entity);
             return await _dbContext.SaveChangesAsync() > 0;
@@ -154,7 +154,7 @@ namespace PublicWorkflow.Infrastructure.Repositories
         {
             entities.ForEach(a =>
             {
-                a.LastModifiedBy = _user?.Username;
+                a.LastModifiedBy = _user?.UserName;
                 a.LastModifiedOn = DateTime.Now;
             });
             _dbContext.UpdateRange(entities);

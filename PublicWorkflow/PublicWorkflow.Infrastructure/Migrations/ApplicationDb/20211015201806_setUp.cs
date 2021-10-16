@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace PublicWorkflow.Infrastructure.ApplicationDb
+namespace PublicWorkflow.Infrastructure.Migrations.ApplicationDb
 {
-    public partial class InitialMigration : Migration
+    public partial class setUp : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -84,11 +84,7 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(type: "text", nullable: true),
-                    OrganizationId = table.Column<long>(type: "bigint", nullable: false),
-                    CanCreateConfig = table.Column<bool>(type: "boolean", nullable: false),
-                    CanCreateUser = table.Column<bool>(type: "boolean", nullable: false),
-                    CanManageConfig = table.Column<bool>(type: "boolean", nullable: false),
-                    CanManageUser = table.Column<bool>(type: "boolean", nullable: false),
+                    OrganizationId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
@@ -103,7 +99,7 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                         column: x => x.OrganizationId,
                         principalTable: "Organization",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,15 +111,9 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     RequiredApprovalLevels = table.Column<int>(type: "integer", nullable: false),
-                    PublishType = table.Column<int>(type: "integer", nullable: false),
-                    FeedBackUrl = table.Column<string>(type: "text", nullable: true),
-                    SingleRejection = table.Column<bool>(type: "boolean", nullable: false),
-                    NotifyAllApproverOnApproval = table.Column<bool>(type: "boolean", nullable: false),
-                    NotifyInitiatorOnApproval = table.Column<bool>(type: "boolean", nullable: false),
-                    AttachApprovalPdf = table.Column<bool>(type: "boolean", nullable: false),
-                    IncludeApproverDetails = table.Column<bool>(type: "boolean", nullable: false),
                     IsEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    OrganizationId = table.Column<long>(type: "bigint", nullable: false),
+                    OrganizationId = table.Column<long>(type: "bigint", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
@@ -138,7 +128,7 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                         column: x => x.OrganizationId,
                         principalTable: "Organization",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -198,6 +188,58 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                         principalTable: "ProcessConfig",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PublishOption",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Publish = table.Column<int>(type: "integer", nullable: false),
+                    Url_Topic = table.Column<string>(type: "text", nullable: true),
+                    PostObjectKeyNames = table.Column<string>(type: "text", nullable: true),
+                    ProcessConfigId = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PublishOption", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PublishOption_ProcessConfig_ProcessConfigId",
+                        column: x => x.ProcessConfigId,
+                        principalTable: "ProcessConfig",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Requirement",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Requirement = table.Column<int>(type: "integer", nullable: false),
+                    ProcessConfigId = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requirement", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Requirement_ProcessConfig_ProcessConfigId",
+                        column: x => x.ProcessConfigId,
+                        principalTable: "ProcessConfig",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,6 +309,16 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                 name: "IX_ProcessConfig_OrganizationId",
                 table: "ProcessConfig",
                 column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PublishOption_ProcessConfigId",
+                table: "PublishOption",
+                column: "ProcessConfigId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requirement_ProcessConfigId",
+                table: "Requirement",
+                column: "ProcessConfigId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -282,6 +334,12 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
 
             migrationBuilder.DropTable(
                 name: "OrganizationUser");
+
+            migrationBuilder.DropTable(
+                name: "PublishOption");
+
+            migrationBuilder.DropTable(
+                name: "Requirement");
 
             migrationBuilder.DropTable(
                 name: "ApprovalConfig");

@@ -44,22 +44,22 @@ namespace PublicWorkflow.Infrastructure.DbContexts
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedOn = _dateTime.NowUtc;
-                        entry.Entity.CreatedBy = _authenticatedUser.UserId;
+                        entry.Entity.CreatedBy = _authenticatedUser.UserName;
                         break;
 
                     case EntityState.Modified:
                         entry.Entity.LastModifiedOn = _dateTime.NowUtc;
-                        entry.Entity.LastModifiedBy = _authenticatedUser.UserId;
+                        entry.Entity.LastModifiedBy = _authenticatedUser.UserName;
                         break;
                 }
             }
-            if (_authenticatedUser.UserId == null)
+            if (_authenticatedUser.UId == null)
             {
                 return await base.SaveChangesAsync(cancellationToken);
             }
             else
             {
-                return await base.SaveChangesAsync(_authenticatedUser.UserId);
+                return await base.SaveChangesAsync(_authenticatedUser.UserName);
             }
         }
 

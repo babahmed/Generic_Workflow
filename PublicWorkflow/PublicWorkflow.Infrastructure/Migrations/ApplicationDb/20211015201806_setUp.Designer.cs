@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PublicWorkflow.Infrastructure.DbContexts;
 
-namespace PublicWorkflow.Infrastructure.ApplicationDb
+namespace PublicWorkflow.Infrastructure.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210626102122_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20211015201806_setUp")]
+    partial class setUp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -268,18 +268,6 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<bool>("CanCreateConfig")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("CanCreateUser")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("CanManageConfig")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("CanManageUser")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -298,7 +286,7 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<long>("OrganizationId")
+                    b.Property<long?>("OrganizationId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -365,9 +353,6 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<bool>("AttachApprovalPdf")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -376,12 +361,6 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
-
-                    b.Property<string>("FeedBackUrl")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IncludeApproverDetails")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -398,29 +377,96 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<bool>("NotifyAllApproverOnApproval")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("NotifyInitiatorOnApproval")
-                        .HasColumnType("boolean");
-
-                    b.Property<long>("OrganizationId")
+                    b.Property<long?>("OrganizationId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("PublishType")
-                        .HasColumnType("integer");
 
                     b.Property<int>("RequiredApprovalLevels")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("SingleRejection")
-                        .HasColumnType("boolean");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("ProcessConfig");
+                });
+
+            modelBuilder.Entity("PublicWorkflow.Domain.Entities.Catalog.ProcessRequirement", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("ProcessConfigId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Requirement")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessConfigId");
+
+                    b.ToTable("Requirement");
+                });
+
+            modelBuilder.Entity("PublicWorkflow.Domain.Entities.Catalog.PublishOption", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("PostObjectKeyNames")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("ProcessConfigId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Publish")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url_Topic")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessConfigId");
+
+                    b.ToTable("PublishOption");
                 });
 
             modelBuilder.Entity("PublicWorkflow.Domain.Entities.Catalog.Approval", b =>
@@ -457,9 +503,7 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                 {
                     b.HasOne("PublicWorkflow.Domain.Entities.Catalog.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrganizationId");
 
                     b.Navigation("Organization");
                 });
@@ -479,11 +523,23 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
                 {
                     b.HasOne("PublicWorkflow.Domain.Entities.Catalog.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrganizationId");
 
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("PublicWorkflow.Domain.Entities.Catalog.ProcessRequirement", b =>
+                {
+                    b.HasOne("PublicWorkflow.Domain.Entities.Catalog.ProcessConfig", null)
+                        .WithMany("Requirements")
+                        .HasForeignKey("ProcessConfigId");
+                });
+
+            modelBuilder.Entity("PublicWorkflow.Domain.Entities.Catalog.PublishOption", b =>
+                {
+                    b.HasOne("PublicWorkflow.Domain.Entities.Catalog.ProcessConfig", null)
+                        .WithMany("PublishConfigs")
+                        .HasForeignKey("ProcessConfigId");
                 });
 
             modelBuilder.Entity("PublicWorkflow.Domain.Entities.Catalog.ApprovalConfig", b =>
@@ -499,6 +555,10 @@ namespace PublicWorkflow.Infrastructure.ApplicationDb
             modelBuilder.Entity("PublicWorkflow.Domain.Entities.Catalog.ProcessConfig", b =>
                 {
                     b.Navigation("ApprovalConfigs");
+
+                    b.Navigation("PublishConfigs");
+
+                    b.Navigation("Requirements");
                 });
 #pragma warning restore 612, 618
         }

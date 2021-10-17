@@ -32,6 +32,11 @@ namespace PublicWorkflow.Infrastructure.DbContexts
         public DbSet<ProcessRequirement> Requirement { get; set; }
         public DbSet<PublishOption> PublishOption { get; set; }
 
+        #region Views
+        public DbSet<ProcessView> ProcessView { get; set; }
+
+        #endregion
+
         public IDbConnection Connection => Database.GetDbConnection();
 
         public bool HasChanges => ChangeTracker.HasChanges();
@@ -74,6 +79,8 @@ namespace PublicWorkflow.Infrastructure.DbContexts
             builder.ApplyConfiguration(new ProcessConfiguration());
             builder.ApplyConfiguration(new ApprovalconfigConfiguration());
             builder.ApplyConfiguration(new ApprovalConfiguration());
+            builder.ApplyConfiguration(new ProcessViewConfiguration());
+            builder.Entity<ProcessView>().ToView(nameof(ProcessView));
             base.OnModelCreating(builder);
         }
     }

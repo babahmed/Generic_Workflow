@@ -13,8 +13,8 @@ namespace PublicWorkflow.Infrastructure.DbContexts
             builder
             .Property(e => e.Attachements)
             .HasConversion(
-                v => string.Join('/', v),
-                v => v.Split('/', StringSplitOptions.RemoveEmptyEntries));
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
         }
     }
     public class ApprovalconfigConfiguration : IEntityTypeConfiguration<ApprovalConfig>
@@ -25,8 +25,8 @@ namespace PublicWorkflow.Infrastructure.DbContexts
             builder
             .Property(e => e.Approvers)
             .HasConversion(
-                v => string.Join('/', v),
-                v => v.Split('/', StringSplitOptions.RemoveEmptyEntries));
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
         }
     }
 
@@ -37,14 +37,44 @@ namespace PublicWorkflow.Infrastructure.DbContexts
             builder
             .Property(e => e.AlreadyApproved)
             .HasConversion(
-                v => string.Join('/', v),
-                v => v.Split('/', StringSplitOptions.RemoveEmptyEntries));
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
 
             builder
             .Property(e => e.Comments)
             .HasConversion(
-                v => string.Join('/', v),
-                v => v.Split('/', StringSplitOptions.RemoveEmptyEntries));
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
+
+    public class ProcessViewConfiguration : IEntityTypeConfiguration<ProcessView>
+    {
+        public void Configure(EntityTypeBuilder<ProcessView> builder)
+        {
+            builder
+            .Property(e => e.AlreadyApproved)
+            .HasConversion(
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
+
+            builder
+            .Property(e => e.Comments)
+            .HasConversion(
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
+
+            builder
+            .Property(e => e.Attachements)
+            .HasConversion(
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
+
+            builder
+            .Property(e => e.Approvers)
+            .HasConversion(
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

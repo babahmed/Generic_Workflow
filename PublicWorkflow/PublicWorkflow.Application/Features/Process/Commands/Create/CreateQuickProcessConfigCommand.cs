@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using PublicWorkflow.Application.DTOs.ViewModel;
 using System;
 using PublicWorkflow.Application.Interfaces.Shared;
+using System.Linq;
 
 namespace PublicWorkflow.Application.Features.Commands.Create
 {
@@ -61,6 +62,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
                 item.ProcessConfigId = config.Id;
                 item.Name = $"Level {item.Level}";
                 item.Description = $"Approval at Level {item.Level}";
+                item.Approvers= item.Approvers.Select(s => s.ToUpperInvariant()).ToArray();
                 await _mediator.Send(item);
             }
 

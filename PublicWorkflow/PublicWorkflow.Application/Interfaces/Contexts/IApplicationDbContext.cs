@@ -25,5 +25,6 @@ namespace PublicWorkflow.Application.Interfaces.Contexts
         DbSet<ProcessConfig> ProcessConfig { get; set; }
         DbSet<ProcessRequirement> Requirement { get; set; }
         DbSet<PublishOption> PublishOption { get; set; }
+        DbSet<ProcessView> ProcessView { get; set; }
     }
 }

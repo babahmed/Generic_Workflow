@@ -31,12 +31,13 @@ namespace PublicWorkflow.Application.Features.Commands.Create
 
         public async Task<Result<long>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
         {
-            var configs = await _approvalConfigRepository.GetAllAsync(c => c.ProcessConfigId == request.ProcessConfigId);
+            var configs = (await _approvalConfigRepository.GetAllAsync(c => c.ProcessConfigId == request.ProcessConfigId)).ToList();
 
             foreach (var config in configs)
             {
                 var approval = new Approval()
                 {
+                    Status=config.Level==0?Status.InProcess:Status.New,
                     AlreadyApproved = new string[] { },
                     Comments = new string[] { },
                     ProcessId = request.ProcessId,

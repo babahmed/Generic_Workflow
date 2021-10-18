@@ -76,48 +76,51 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
             else
             {
 
-                Expression<Func<ProcessView, bool>> func;
+                var upperName = _user.UserName.ToUpper();
                 switch (request.Status)
                 {
                     case Status.New:
                     case Status.InProcess:
-                        func = c =>
+                        dataQuery = await _approvalsRepository.GetAllAsync(c =>
+                        c.Status == request.Status && c.RawApprovers.Contains(upperName) &&
                         (string.IsNullOrEmpty(request.Search)
                         || c.LevelName.ToUpper().Contains(request.Search.ToUpper())
                         || c.LevelDescription.ToUpper().Contains(request.Search.ToUpper())
                         || c.Data.ToUpper().Contains(request.Search.ToUpper())
                         )
                         &&
-                        (request.Level == null || c.Level == request.Level) &&
-                        c.Status == request.Status && c.Approvers.Contains(_user.UserName.ToUpper());
+                        (request.Level == null || c.Level == request.Level)
+                        );
                         break;
                     case Status.Approved:
                     case Status.Rejected:
-                        func = c =>
+                        dataQuery = await _approvalsRepository.GetAllAsync(c =>
+                        c.Status == request.Status && c.RawAlreadyApproved.Contains(upperName) &&
                         (string.IsNullOrEmpty(request.Search)
                         || c.LevelName.ToUpper().Contains(request.Search.ToUpper())
                         || c.LevelDescription.ToUpper().Contains(request.Search.ToUpper())
                         || c.Data.ToUpper().Contains(request.Search.ToUpper())
                         )
                         &&
-                        (request.Level == null || c.Level == request.Level) &&
-                        c.Status == request.Status && c.AlreadyApproved.Contains(_user.UserName.ToUpper());
+                        (request.Level == null || c.Level == request.Level) 
+                        );
                         break;
                     case Status.InReview:
                     default:
-                        func = c =>
+                        dataQuery = await _approvalsRepository.GetAllAsync(c=>
+                        c.RawAlreadyApproved.Contains(upperName) &&
                         (string.IsNullOrEmpty(request.Search)
                         || c.LevelName.ToUpper().Contains(request.Search.ToUpper())
                         || c.LevelDescription.ToUpper().Contains(request.Search.ToUpper())
                         || c.Data.ToUpper().Contains(request.Search.ToUpper())
                         )
                         &&
-                        (request.Level == null || c.Level == request.Level) &&
-                        c.AlreadyApproved.Contains(_user.UserName.ToUpper());
+                        (request.Level == null || c.Level == request.Level)
+                        );
                         break;
                 };
 
-                dataQuery = await _approvalsRepository.GetAllAsync(func);          
+               // dataQuery = await _approvalsRepository.GetAllAsync(func);          
 
             }
 

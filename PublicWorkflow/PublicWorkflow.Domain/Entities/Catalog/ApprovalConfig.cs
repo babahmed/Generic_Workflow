@@ -16,5 +16,6 @@ namespace PublicWorkflow.Domain.Entities.Catalog
         public int RequiredApprovers { get; set; }
         public string[] Approvers { get; set; }
         public virtual ICollection<Approval> Approvals { get; set; }
+        public virtual ICollection<ApprovalRule> Rules { get; set; }
     }
 }

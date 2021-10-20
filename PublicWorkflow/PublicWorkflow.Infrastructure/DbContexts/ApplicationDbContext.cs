@@ -31,6 +31,8 @@ namespace PublicWorkflow.Infrastructure.DbContexts
         public DbSet<ProcessConfig> ProcessConfig { get; set; }
         public DbSet<ProcessRequirement> Requirement { get; set; }
         public DbSet<PublishOption> PublishOption { get; set; }
+        public DbSet<ApprovalRule> ApprovalRule { get; set; }
+        public DbSet<ProcessRule> ProcessRule { get; set; }
 
         #region Views
         public DbSet<ProcessView> ProcessView { get; set; }

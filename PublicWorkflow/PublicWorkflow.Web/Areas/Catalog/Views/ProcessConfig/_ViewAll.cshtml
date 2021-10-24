@@ -1,0 +1,63 @@
+﻿@using PublicWorkflow.Web.Areas.Catalog.Models
+@model IEnumerable<ProcessConfigViewModel>
+<table id="configsTable" class="table table-striped" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Config.Delete)).Result.Succeeded
+               || (AuthorizationService.AuthorizeAsync(User, Permissions.Config.Edit)).Result.Succeeded)
+            {
+                <th>Actions</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var configs in Model)
+        {
+        <tr>
+            <td>
+                @configs.Id
+            </td>
+            <td>
+                @configs.Name
+            </td>
+            <td>
+                @configs.Description
+            </td>
+            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Config.Delete)).Result.Succeeded
+       || (AuthorizationService.AuthorizeAsync(User, Permissions.Config.Edit)).Result.Succeeded)
+            {
+                <td text-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action
+                        </button>
+                        <div class="dropdown-menu shadow animated--grow-in">
+                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Config.Edit)).Result.Succeeded)
+                            {
+                                <a onclick="jQueryModalGet('/catalog/processconfig/OnGetCreateOrEdit?id=@configs.Id','Edit Process Config')" class="dropdown-item"><i class="fas fa-pencil-alt"></i>  Edit</a>
+
+                            }
+                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Config.Delete)).Result.Succeeded)
+
+                            {
+                                <form id="form_delete_@configs.Id" asp-area="Catalog" asp-controller="Product" method="post" asp-action="OnPostDelete" asp-route-id="@configs.Id" onsubmit="return jQueryModalDelete(this)">
+                                    <a href="javascript:$('#form_delete_@configs.Id').submit();" class="dropdown-item"><i class="fas fa-trash-alt"></i>  Delete</a>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $("#configsTable").DataTable();
+    });
+</script>

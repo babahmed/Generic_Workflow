@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PublicWorkflow.Api</name>
+    </assembly>
+    <members>
+        <member name="M:PublicWorkflow.Api.Controllers.IdentityController.GetTokenAsync(PublicWorkflow.Application.DTOs.Identity.TokenRequest)">
+            <summary>
+            Generates a JSON Web Token for a valid combination of emailId and password.
+            </summary>
+            <param name="tokenRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ProcessConfigController.Post(PublicWorkflow.Application.Features.Commands.Create.CreateQuickProcessConfigCommand)">
+            <summary>
+            Quick Config creation
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

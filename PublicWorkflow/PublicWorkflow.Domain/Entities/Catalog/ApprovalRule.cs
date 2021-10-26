@@ -14,5 +14,7 @@ namespace PublicWorkflow.Domain.Entities.Catalog
         public RuleType Type { get; set; }
         public Rulecondition Condition { get; set; }
         public RuleAction Action { get; set; }
+        public ApprovalConfig ApprovalConfig { get; set; }
+        public long ApprovalConfigId { get; set; }
     }
 }

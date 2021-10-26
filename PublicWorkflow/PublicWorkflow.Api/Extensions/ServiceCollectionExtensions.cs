@@ -20,6 +20,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Hangfire;
+using Hangfire.PostgreSql;
 
 namespace PublicWorkflow.Api.Extensions
 {
@@ -38,6 +40,17 @@ namespace PublicWorkflow.Api.Extensions
         {
             services.RegisterSwagger();
             services.AddVersioning();
+        }
+
+        public static void AddHangfireServices(this IServiceCollection services, IConfiguration _configuration)
+        {
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UsePostgreSqlStorage(_configuration.GetConnectionString("HangfireConnection")));
+
+            services.AddHangfireServer();
         }
 
         private static void RegisterSwagger(this IServiceCollection services)

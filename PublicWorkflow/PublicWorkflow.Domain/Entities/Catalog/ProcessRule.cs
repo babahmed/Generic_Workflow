@@ -14,5 +14,7 @@ namespace PublicWorkflow.Domain.Entities.Catalog
         public RuleType Type { get; set; }
         public Rulecondition Condition { get; set; }
         public RuleAction Action { get; set; }
+        public ProcessConfig ProcessConfig { get; set; }
+        public long ProcessConfigId { get; set; }
     }
 }

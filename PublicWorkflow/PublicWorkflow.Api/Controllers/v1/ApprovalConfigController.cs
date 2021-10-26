@@ -1,20 +1,19 @@
-﻿using PublicWorkflow.API.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using PublicWorkflow.API.Controllers;
 using PublicWorkflow.Application.Features.Commands.Create;
-using PublicWorkflow.Application.Features.Queries.GetAll;
+using PublicWorkflow.Application.Features.Commands.Update;
 using PublicWorkflow.Application.Features.Queries.GetAllPaged;
 using PublicWorkflow.Application.Features.Queries.GetById;
-using PublicWorkflow.Application.Features.Commands.Update;
+using System.Threading.Tasks;
 
 namespace PublicWorkflow.Api.Controllers.v1
 {
     public class ApprovalConfigController : BaseApiController<ApprovalConfigController>
     {
         [HttpGet]
-        public async Task<IActionResult> GetAll(string search,long? level, int? pageNumber, int? pageSize)
+        public async Task<IActionResult> GetAll(string search, long? level, int? pageNumber, int? pageSize)
         {
-            var configs = await _mediator.Send(new GetAllApprovalConfigQuery( search, level, pageNumber, pageSize));
+            var configs = await _mediator.Send(new GetAllApprovalConfigQuery(search, level, pageNumber, pageSize));
             return Ok(configs);
         }
 

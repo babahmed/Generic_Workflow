@@ -1,9 +1,9 @@
-﻿using PublicWorkflow.Application.DTOs;
-using PublicWorkflow.Application.Interfaces.Repositories;
-using PublicWorkflow.Application.Interfaces.Shared;
-using AspNetCoreHero.EntityFrameworkCore.AuditTrail.Models;
+﻿using AspNetCoreHero.EntityFrameworkCore.AuditTrail.Models;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PublicWorkflow.Application.DTOs;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Application.Interfaces.Shared;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

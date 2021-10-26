@@ -1,10 +1,10 @@
-﻿using PublicWorkflow.Application.Interfaces.Repositories;
-using PublicWorkflow.Domain.Entities.Catalog;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
 using MediatR;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Domain.Entities.Catalog;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 
 namespace PublicWorkflow.Application.Features.Commands.Create
 {
@@ -22,7 +22,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         private readonly IMediator _mediator;
 
         public CreateProcessCommandHandler(
-            IGenericRepository<ProcessConfig> ProcessConfigRepository, 
+            IGenericRepository<ProcessConfig> ProcessConfigRepository,
             IGenericRepository<Process> ProcessRepository,
             IMediator mediator)
         {
@@ -35,7 +35,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         {
             var config = await _ProcessConfigRepository.GetByIdAsync(request.ProcessConfigId);
 
-            if(config==null || config.IsDeleted)
+            if (config == null || config.IsDeleted)
             {
                 return Result<long>.Fail("Invalid configuration");
             }
@@ -53,7 +53,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
 
             var approvals = await _mediator.Send(approvaCommand);
 
-            return Result<long>.Success(config.Id,$"process addedd to {config.Name} with {approvals.Data} approval level(s)");
+            return Result<long>.Success(config.Id, $"process addedd to {config.Name} with {approvals.Data} approval level(s)");
         }
     }
 }

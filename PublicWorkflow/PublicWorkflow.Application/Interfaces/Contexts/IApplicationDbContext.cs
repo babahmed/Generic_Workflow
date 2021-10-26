@@ -1,6 +1,6 @@
-﻿using PublicWorkflow.Domain.Entities.Catalog;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using PublicWorkflow.Domain.Entities.Catalog;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;

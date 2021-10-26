@@ -1,12 +1,12 @@
-﻿using PublicWorkflow.Application.Interfaces.Repositories;
-using PublicWorkflow.Domain.Entities.Catalog;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
 using AutoMapper;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Domain.Entities.Catalog;
 using PublicWorkflow.Domain.Enum;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PublicWorkflow.Application.Features.Commands.Create
 {
@@ -37,13 +37,13 @@ namespace PublicWorkflow.Application.Features.Commands.Create
             {
                 var approval = new Approval()
                 {
-                    Status=config.Level==0?Status.InProcess:Status.New,
+                    Status = config.Level == 0 ? Status.InProcess : Status.New,
                     AlreadyApproved = new string[] { },
                     Comments = new string[] { },
                     ProcessId = request.ProcessId,
-                    ApprovalconfigId=config.Id
+                    ApprovalconfigId = config.Id
                 };
-               await _approvalRepository.AddAsync(approval);
+                await _approvalRepository.AddAsync(approval);
             }
             return Result<long>.Success(configs.Count());
         }

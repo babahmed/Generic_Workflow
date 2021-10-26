@@ -1,12 +1,6 @@
-﻿using PublicWorkflow.Api.Services;
-using PublicWorkflow.Application.DTOs.Settings;
-using PublicWorkflow.Application.Interfaces;
-using PublicWorkflow.Application.Interfaces.Shared;
-using PublicWorkflow.Infrastructure.DbContexts;
-using PublicWorkflow.Infrastructure.Identity.Models;
-using PublicWorkflow.Infrastructure.Identity.Services;
-using PublicWorkflow.Infrastructure.Shared.Services;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,11 +11,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using PublicWorkflow.Api.Services;
+using PublicWorkflow.Application.DTOs.Settings;
+using PublicWorkflow.Application.Interfaces;
+using PublicWorkflow.Application.Interfaces.Shared;
+using PublicWorkflow.Infrastructure.DbContexts;
+using PublicWorkflow.Infrastructure.Identity.Models;
+using PublicWorkflow.Infrastructure.Identity.Services;
+using PublicWorkflow.Infrastructure.Shared.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Hangfire;
-using Hangfire.PostgreSql;
 
 namespace PublicWorkflow.Api.Extensions
 {

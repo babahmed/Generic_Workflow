@@ -40,7 +40,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
 
         public async Task<Result<List<GetAllApprovalConfigResponse>>> Handle(GetAllApprovalConfigQuery request, CancellationToken cancellationToken)
         {
-            var dataQuery = await _approvalConfigRepository.GetAllAsync(c=>
+            var dataQuery = await _approvalConfigRepository.GetAllAsync(c =>
             (string.IsNullOrEmpty(request.Search)
             || c.Description.ToUpper().Contains(request.Search.ToUpper())
             || c.Name.ToUpper().Contains(request.Search.ToUpper())
@@ -48,7 +48,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
             &&
             (request.Level == null || c.Level == request.Level)
             );
-            var record= await dataQuery.OrderByDescending(x => x.Id).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+            var record = await dataQuery.OrderByDescending(x => x.Id).ToPaginatedListAsync(request.PageNumber, request.PageSize);
 
 
             record.Message = record.TotalCount > 0 ? "data retrieved ok" : "No data found";

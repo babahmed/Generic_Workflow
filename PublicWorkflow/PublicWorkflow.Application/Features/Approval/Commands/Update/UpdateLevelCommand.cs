@@ -1,15 +1,15 @@
-﻿using PublicWorkflow.Application.Interfaces.Repositories;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
+using Hangfire;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Application.Interfaces.Service;
+using PublicWorkflow.Application.Interfaces.Shared;
 using PublicWorkflow.Domain.Entities.Catalog;
 using PublicWorkflow.Domain.Enum;
-using PublicWorkflow.Application.Interfaces.Shared;
-using System.Linq;
 using System.Collections.Generic;
-using PublicWorkflow.Application.Interfaces.Service;
-using Hangfire;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PublicWorkflow.Application.Features.Commands.Update
 {
@@ -123,7 +123,7 @@ namespace PublicWorkflow.Application.Features.Commands.Update
                 if (!approvalRules.Any())
                 {
                     //Has everyone approved?
-                    if (command.Status==Status.Rejected)
+                    if (command.Status == Status.Rejected)
                     {
                         //Update Approvals
                         Approval.Status = Status.Rejected;
@@ -151,7 +151,7 @@ namespace PublicWorkflow.Application.Features.Commands.Update
                     }
 
                     //Has everyone approved?
-                    if (ApprovalConfig.Approvers.Length == Approval.AlreadyApproved.Length && command.Status==Status.Approved)
+                    if (ApprovalConfig.Approvers.Length == Approval.AlreadyApproved.Length && command.Status == Status.Approved)
                     {
                         Approval.Actioned = _date.NowUtc;
                         Approval.Treated = true;

@@ -1,16 +1,15 @@
-﻿using PublicWorkflow.Application.Interfaces.Repositories;
-using PublicWorkflow.Domain.Entities.Catalog;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using PublicWorkflow.Application.DTOs.ViewModel;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Application.Interfaces.Shared;
+using PublicWorkflow.Domain.Entities.Catalog;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using PublicWorkflow.Application.DTOs.ViewModel;
-using System;
-using PublicWorkflow.Application.Interfaces.Shared;
-using System.Linq;
 
 namespace PublicWorkflow.Application.Features.Commands.Create
 {
@@ -19,7 +18,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         public string Name { get; set; }
         public string Description { get; set; }
         public List<ApprovalConfigBase> ApprovalLevels { get; set; }
-    
+
     }
 
     public class CreateQuickProcessConfigCommandHandler : IRequestHandler<CreateQuickProcessConfigCommand, Result<long>>
@@ -48,13 +47,13 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         public async Task<Result<long>> Handle(CreateQuickProcessConfigCommand request, CancellationToken cancellationToken)
         {
             var config = _mapper.Map<ProcessConfig>(request);
-            config.OrganizationId= _user.OId;
-            config.UserId= _user.UId;
+            config.OrganizationId = _user.OId;
+            config.UserId = _user.UId;
             config.RequiredApprovalLevels = request.ApprovalLevels.Count;
 
             await _ProcessConfigRepository.AddAsync(config);
 
-            
+
 
             foreach (var ApprovalItem in request.ApprovalLevels)
             {
@@ -62,7 +61,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
                 item.ProcessConfigId = config.Id;
                 item.Name = $"Level {item.Level}";
                 item.Description = $"Approval at Level {item.Level}";
-                item.Approvers= item.Approvers.Select(s => s.ToUpperInvariant()).ToArray();
+                item.Approvers = item.Approvers.Select(s => s.ToUpperInvariant()).ToArray();
                 await _mediator.Send(item);
             }
 

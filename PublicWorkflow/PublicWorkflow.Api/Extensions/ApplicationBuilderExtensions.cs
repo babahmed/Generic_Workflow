@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using PublicWorkflow.Infrastructure.DbContexts;
-using PublicWorkflow.Infrastructure.Identity.Models;
-using System;
 
 namespace PublicWorkflow.Api.Extensions
 {
@@ -26,9 +22,9 @@ namespace PublicWorkflow.Api.Extensions
             using (IServiceScope serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var services = serviceScope.ServiceProvider;
-               // services.GetService<IdentityContext>().Database.Migrate();
+                // services.GetService<IdentityContext>().Database.Migrate();
                 services.GetService<ApplicationDbContext>().Database.Migrate();
-                
+
             }
             return app;
         }

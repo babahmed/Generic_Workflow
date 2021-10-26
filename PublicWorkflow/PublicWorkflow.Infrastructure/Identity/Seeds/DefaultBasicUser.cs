@@ -1,6 +1,6 @@
-﻿using PublicWorkflow.Application.Enums;
+﻿using Microsoft.AspNetCore.Identity;
+using PublicWorkflow.Application.Enums;
 using PublicWorkflow.Infrastructure.Identity.Models;
-using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Threading.Tasks;
 

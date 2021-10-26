@@ -1,14 +1,13 @@
-﻿using PublicWorkflow.Application.Interfaces.Repositories;
-using PublicWorkflow.Domain.Entities.Catalog;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Application.Interfaces.Shared;
+using PublicWorkflow.Domain.Entities.Catalog;
+using PublicWorkflow.Domain.Enum;
 using System.Threading;
 using System.Threading.Tasks;
-using PublicWorkflow.Domain.Enum;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
-using PublicWorkflow.Application.Interfaces.Shared;
 
 namespace PublicWorkflow.Application.Features.Commands.Create
 {
@@ -49,7 +48,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         public async Task<Result<long>> Handle(CreateProcessConfigCommand request, CancellationToken cancellationToken)
         {
             var config = _mapper.Map<ProcessConfig>(request);
-            config.OrganizationId= _user.OId;
+            config.OrganizationId = _user.OId;
             await _ProcessConfigRepository.AddAsync(config);
 
             return Result<long>.Success(config.Id);

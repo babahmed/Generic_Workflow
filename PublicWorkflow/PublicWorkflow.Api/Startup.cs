@@ -1,7 +1,3 @@
-using PublicWorkflow.Api.Extensions;
-using PublicWorkflow.Api.Middlewares;
-using PublicWorkflow.Application.Extensions;
-using PublicWorkflow.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +5,10 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PublicWorkflow.Api.Extensions;
+using PublicWorkflow.Api.Middlewares;
+using PublicWorkflow.Application.Extensions;
+using PublicWorkflow.Infrastructure.Extensions;
 
 namespace PublicWorkflow.Api
 {

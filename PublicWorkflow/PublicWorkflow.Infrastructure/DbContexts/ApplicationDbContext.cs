@@ -1,9 +1,9 @@
 ﻿using AspNetCoreHero.Abstractions.Domain;
+using AspNetCoreHero.EntityFrameworkCore.AuditTrail;
+using Microsoft.EntityFrameworkCore;
 using PublicWorkflow.Application.Interfaces.Contexts;
 using PublicWorkflow.Application.Interfaces.Shared;
 using PublicWorkflow.Domain.Entities.Catalog;
-using AspNetCoreHero.EntityFrameworkCore.AuditTrail;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq;
 using System.Threading;

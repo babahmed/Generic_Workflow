@@ -11,9 +11,9 @@ namespace PublicWorkflow.Api.Controllers.v1
     public class ProcessConfigController : BaseApiController<ProcessConfigController>
     {
         [HttpGet]
-        public async Task<IActionResult> GetAll(string search,long? orgId, int? pageNumber, int? pageSize)
+        public async Task<IActionResult> GetAll(string search, long? orgId, int? pageNumber, int? pageSize)
         {
-            var configs = await _mediator.Send(new GetAllProcessConfigQuery( search, orgId, pageNumber, pageSize));
+            var configs = await _mediator.Send(new GetAllProcessConfigQuery(search, orgId, pageNumber, pageSize));
             return Ok(configs);
         }
 
@@ -30,13 +30,13 @@ namespace PublicWorkflow.Api.Controllers.v1
         {
             return Ok(await _mediator.Send(command));
         }
-        
+
         /// <summary>
         /// Quick Config creation
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        [HttpPost,Route("QuickConfig")]
+        [HttpPost, Route("QuickConfig")]
         public async Task<IActionResult> Post(CreateQuickProcessConfigCommand command)
         {
             return Ok(await _mediator.Send(command));

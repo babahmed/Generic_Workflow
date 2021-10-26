@@ -6,7 +6,6 @@ using PublicWorkflow.Application.Extensions;
 using PublicWorkflow.Application.Interfaces.Repositories;
 using PublicWorkflow.Application.Interfaces.Shared;
 using PublicWorkflow.Domain.Entities.Catalog;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +18,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAll
         public long? OrganizationId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public GetAllProcessConfigQuery(string search, long? organizationId, int? pageNumber=1,int?pageSize=20)
+        public GetAllProcessConfigQuery(string search, long? organizationId, int? pageNumber = 1, int? pageSize = 20)
         {
             Search = search;
             OrganizationId = organizationId;
@@ -44,7 +43,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAll
         public async Task<Result<PaginatedResult<GetAllProcessConfigResponse>>> Handle(GetAllProcessConfigQuery request, CancellationToken cancellationToken)
         {
 
-            var dataQuery = await _processConfig.GetAllAsync(c=>
+            var dataQuery = await _processConfig.GetAllAsync(c =>
             (string.IsNullOrEmpty(request.Search)
             || c.Description.ToUpper().Contains(request.Search.ToUpper())
             || c.Name.ToUpper().Contains(request.Search.ToUpper())
@@ -57,7 +56,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAll
             var record = await dataQuery.OrderByDescending(x => x.Id)
                 .Select(c => new GetAllProcessConfigResponse()
                 {
-                    Id=c.Id,
+                    Id = c.Id,
                     UserId = c.UserId,
                     Description = c.Description,
                     IsEnabled = c.IsEnabled,

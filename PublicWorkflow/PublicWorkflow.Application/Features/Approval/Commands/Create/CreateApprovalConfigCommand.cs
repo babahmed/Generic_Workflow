@@ -1,11 +1,10 @@
-﻿using PublicWorkflow.Application.Interfaces.Repositories;
-using PublicWorkflow.Domain.Entities.Catalog;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
 using AutoMapper;
 using MediatR;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Domain.Entities.Catalog;
 using System.Threading;
 using System.Threading.Tasks;
-using PublicWorkflow.Domain.Enum;
 
 namespace PublicWorkflow.Application.Features.Commands.Create
 {

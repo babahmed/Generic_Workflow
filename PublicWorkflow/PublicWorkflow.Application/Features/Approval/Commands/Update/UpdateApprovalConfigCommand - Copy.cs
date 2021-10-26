@@ -1,9 +1,9 @@
-﻿using PublicWorkflow.Application.Interfaces.Repositories;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
 using MediatR;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Domain.Entities.Catalog;
 using System.Threading;
 using System.Threading.Tasks;
-using PublicWorkflow.Domain.Entities.Catalog;
 
 namespace PublicWorkflow.Application.Features.Commands.Update
 {

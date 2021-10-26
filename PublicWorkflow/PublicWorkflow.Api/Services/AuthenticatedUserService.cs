@@ -1,8 +1,8 @@
-﻿using PublicWorkflow.Application.Interfaces.Shared;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using PublicWorkflow.Application.Interfaces.Shared;
 using System;
-using System.Linq;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace PublicWorkflow.Api.Services
 {

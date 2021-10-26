@@ -1,7 +1,7 @@
-﻿using PublicWorkflow.Application.DTOs.Identity;
-using PublicWorkflow.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PublicWorkflow.Application.DTOs.Identity;
+using PublicWorkflow.Application.Interfaces;
 using System.Threading.Tasks;
 
 namespace PublicWorkflow.Api.Controllers

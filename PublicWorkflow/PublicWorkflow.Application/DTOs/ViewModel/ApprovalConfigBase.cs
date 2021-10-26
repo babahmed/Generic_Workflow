@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PublicWorkflow.Application.DTOs.ViewModel
+﻿namespace PublicWorkflow.Application.DTOs.ViewModel
 {
     public class ApprovalConfigBase
     {

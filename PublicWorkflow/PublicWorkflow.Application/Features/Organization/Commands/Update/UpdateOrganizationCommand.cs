@@ -1,9 +1,9 @@
-﻿using PublicWorkflow.Application.Interfaces.Repositories;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
 using MediatR;
+using PublicWorkflow.Application.Interfaces.Repositories;
+using PublicWorkflow.Domain.Entities.Catalog;
 using System.Threading;
 using System.Threading.Tasks;
-using PublicWorkflow.Domain.Entities.Catalog;
 
 namespace PublicWorkflow.Application.Features.Commands.Update
 {
@@ -55,7 +55,7 @@ namespace PublicWorkflow.Application.Features.Commands.Update
                     Organization.Phone = command.Phone ?? Organization.Phone;
                     Organization.IsDeleted = command.IsDeleted ?? Organization.IsDeleted;
                     await _OrganizationRepository.UpdateAsync(Organization);
-                    return Result<long>.Success(Organization.Id,"updated succesfully");
+                    return Result<long>.Success(Organization.Id, "updated succesfully");
                 }
             }
         }

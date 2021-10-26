@@ -1,7 +1,7 @@
-﻿using PublicWorkflow.Infrastructure.Identity.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PublicWorkflow.Infrastructure.Identity.Models;
 
 namespace PublicWorkflow.Infrastructure.DbContexts
 {

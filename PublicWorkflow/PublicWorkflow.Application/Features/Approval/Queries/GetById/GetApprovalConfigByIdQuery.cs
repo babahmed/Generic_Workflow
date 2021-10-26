@@ -2,10 +2,10 @@
 using AspNetCoreHero.Results;
 using AutoMapper;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 using PublicWorkflow.Application.Interfaces.Repositories;
 using PublicWorkflow.Domain.Entities.Catalog;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PublicWorkflow.Application.Features.Queries.GetById
 {

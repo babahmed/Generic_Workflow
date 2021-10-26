@@ -1,11 +1,11 @@
 ﻿
+using AutoMapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using PublicWorkflow.Application.Interfaces.Contexts;
 using PublicWorkflow.Application.Interfaces.Repositories;
 using PublicWorkflow.Infrastructure.DbContexts;
 using PublicWorkflow.Infrastructure.Repositories;
-using AutoMapper;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace PublicWorkflow.Infrastructure.Extensions

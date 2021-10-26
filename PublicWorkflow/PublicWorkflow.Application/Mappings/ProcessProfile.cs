@@ -1,13 +1,11 @@
 ﻿
-using PublicWorkflow.Domain.Entities.Catalog;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using PublicWorkflow.Application.Features.Commands.Create;
-using System.Linq;
-using PublicWorkflow.Application.Features.Queries.GetAllPaged;
-using PublicWorkflow.Application.Features.Queries.GetAll;
-using PublicWorkflow.Application.Features.Queries.GetById;
 using PublicWorkflow.Application.DTOs.ViewModel;
+using PublicWorkflow.Application.Features.Commands.Create;
+using PublicWorkflow.Application.Features.Queries.GetAll;
+using PublicWorkflow.Application.Features.Queries.GetAllPaged;
+using PublicWorkflow.Application.Features.Queries.GetById;
+using PublicWorkflow.Domain.Entities.Catalog;
 using System.Collections.Generic;
 
 namespace PublicWorkflow.Application.Mappings

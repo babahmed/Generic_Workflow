@@ -1,7 +1,7 @@
-﻿using PublicWorkflow.Application.Constants;
+﻿using Microsoft.AspNetCore.Identity;
+using PublicWorkflow.Application.Constants;
 using PublicWorkflow.Application.Enums;
 using PublicWorkflow.Infrastructure.Identity.Models;
-using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;

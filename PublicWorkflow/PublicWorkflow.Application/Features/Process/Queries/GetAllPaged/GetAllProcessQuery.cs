@@ -7,9 +7,7 @@ using PublicWorkflow.Application.Interfaces.Repositories;
 using PublicWorkflow.Application.Interfaces.Shared;
 using PublicWorkflow.Domain.Entities.Catalog;
 using PublicWorkflow.Domain.Enum;
-using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +24,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
         public int? ProcessId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public GetAllProcessQuery(string search, long? level,bool myProcess,int? processId, Status status, int? pageNumber = 1, int? pageSize = 20)
+        public GetAllProcessQuery(string search, long? level, bool myProcess, int? processId, Status status, int? pageNumber = 1, int? pageSize = 20)
         {
             ProcessId = processId;
             MyProcess = myProcess;
@@ -68,7 +66,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
                  &&
                  (request.ProcessId == null || c.ProcessId == request.ProcessId)
                  &&
-                 (request.Status == null || c.Status==request.Status)
+                 (request.Status == null || c.Status == request.Status)
                  &&
                  (c.CreatedBy.ToUpper() == _user.UserName.ToUpper())
                  );
@@ -102,12 +100,12 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
                         || c.Data.ToUpper().Contains(request.Search.ToUpper())
                         )
                         &&
-                        (request.Level == null || c.Level == request.Level) 
+                        (request.Level == null || c.Level == request.Level)
                         );
                         break;
                     case Status.InReview:
                     default:
-                        dataQuery = await _approvalsRepository.GetAllAsync(c=>
+                        dataQuery = await _approvalsRepository.GetAllAsync(c =>
                         c.RawAlreadyApproved.Contains(upperName) &&
                         (string.IsNullOrEmpty(request.Search)
                         || c.LevelName.ToUpper().Contains(request.Search.ToUpper())
@@ -120,15 +118,15 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
                         break;
                 };
 
-               // dataQuery = await _approvalsRepository.GetAllAsync(func);          
+                // dataQuery = await _approvalsRepository.GetAllAsync(func);          
 
             }
 
-            var record= await dataQuery.OrderByDescending(x => x.Id).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+            var record = await dataQuery.OrderByDescending(x => x.Id).ToPaginatedListAsync(request.PageNumber, request.PageSize);
 
             record.Message = record.TotalCount > 0 ? "data retrieved ok" : "No data found";
 
-            return Result<PaginatedResult<ProcessView>>.Success(record,"success");
+            return Result<PaginatedResult<ProcessView>>.Success(record, "success");
         }
     }
 }

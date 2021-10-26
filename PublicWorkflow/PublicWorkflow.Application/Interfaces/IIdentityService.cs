@@ -1,5 +1,5 @@
-﻿using PublicWorkflow.Application.DTOs.Identity;
-using AspNetCoreHero.Results;
+﻿using AspNetCoreHero.Results;
+using PublicWorkflow.Application.DTOs.Identity;
 using System.Threading.Tasks;
 
 namespace PublicWorkflow.Application.Interfaces

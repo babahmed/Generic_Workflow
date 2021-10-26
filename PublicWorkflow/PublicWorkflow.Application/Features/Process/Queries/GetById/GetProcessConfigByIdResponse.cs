@@ -1,6 +1,4 @@
-﻿using PublicWorkflow.Domain.Enum;
-
-namespace PublicWorkflow.Application.Features.Queries.GetById
+﻿namespace PublicWorkflow.Application.Features.Queries.GetById
 {
     public class GetProcessConfigByIdResponse
     {

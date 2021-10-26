@@ -1,11 +1,11 @@
-﻿using PublicWorkflow.Application.DTOs.Mail;
-using PublicWorkflow.Application.DTOs.Settings;
-using PublicWorkflow.Application.Interfaces.Shared;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using PublicWorkflow.Application.DTOs.Mail;
+using PublicWorkflow.Application.DTOs.Settings;
+using PublicWorkflow.Application.Interfaces.Shared;
 using System.Threading.Tasks;
 
 namespace PublicWorkflow.Infrastructure.Shared.Services

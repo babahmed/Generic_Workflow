@@ -6,12 +6,15 @@
   <PropertyGroup>
     <DocumentationFile>PublicWorkflow.Api.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
+    <UserSecretsId>614542fb-2c40-40c4-9f1b-2c0824a0da55</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCoreHero.Extensions.Logging" Version="1.0.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />

@@ -14,13 +14,17 @@ using Newtonsoft.Json;
 using PublicWorkflow.Api.Services;
 using PublicWorkflow.Application.DTOs.Settings;
 using PublicWorkflow.Application.Interfaces;
+using PublicWorkflow.Application.Interfaces.Service;
 using PublicWorkflow.Application.Interfaces.Shared;
 using PublicWorkflow.Infrastructure.DbContexts;
 using PublicWorkflow.Infrastructure.Identity.Models;
 using PublicWorkflow.Infrastructure.Identity.Services;
+using PublicWorkflow.Infrastructure.Services;
 using PublicWorkflow.Infrastructure.Shared.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace PublicWorkflow.Api.Extensions
@@ -34,6 +38,7 @@ namespace PublicWorkflow.Api.Extensions
             services.AddTransient<IDateTimeService, SystemDateTimeService>();
             services.AddTransient<IMailService, SMTPMailService>();
             services.AddTransient<IAuthenticatedUserService, AuthenticatedUserService>();
+            services.AddTransient<IPublishService, PublishService>();
         }
 
         public static void AddEssentials(this IServiceCollection services)
@@ -42,25 +47,19 @@ namespace PublicWorkflow.Api.Extensions
             services.AddVersioning();
         }
 
-        public static void AddHangfireServices(this IServiceCollection services, IConfiguration _configuration)
-        {
-            services.AddHangfire(configuration => configuration
-                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UsePostgreSqlStorage(_configuration.GetConnectionString("HangfireConnection")));
-
-            services.AddHangfireServer();
-        }
-
         private static void RegisterSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                //... and tell Swagger to use those XML comments.
+                c.IncludeXmlComments(xmlPath);
                 //TODO - Lowercase Swagger Documents
                 //c.DocumentFilter<LowercaseDocumentFilter>();
                 //Refer - https://gist.github.com/rafalkasa/01d5e3b265e5aa075678e0adfd54e23f
-                c.IncludeXmlComments(string.Format(@"{0}\PublicWorkflow.Api.xml", System.AppDomain.CurrentDomain.BaseDirectory));
+                //c.IncludeXmlComments(string.Format(@"{0}\PublicWorkflow.Api.xml", System.AppDomain.CurrentDomain.BaseDirectory));
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
@@ -120,9 +119,16 @@ namespace PublicWorkflow.Api.Extensions
             }
             else
             {
-                services.AddDbContext<IdentityContext>(options => options.UseNpgsql(configuration.GetConnectionString("IdentityConnection")));
-                services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("ApplicationConnection"), b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                services.AddDbContext<IdentityContext>(options => options.UseNpgsql(configuration["ConnectionStrings:IdentityConnection"]));
+                services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(configuration["ConnectionStrings:ApplicationConnection"], b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+                services.AddHangfire(config => config
+                        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                        .UseSimpleAssemblyNameTypeSerializer()
+                        .UseRecommendedSerializerSettings()
+                        .UsePostgreSqlStorage(configuration["ConnectionStrings:HangfireConnection"]));
             }
+            services.AddHangfireServer();
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = true;

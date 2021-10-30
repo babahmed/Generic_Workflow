@@ -28,6 +28,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <DotNetCliToolReference Include="DotnetPublishSsh" Version="0.1.0" />
+</ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\PublicWorkflow.Application\PublicWorkflow.Application.csproj" />
     <ProjectReference Include="..\PublicWorkflow.Infrastructure.Shared\PublicWorkflow.Infrastructure.Shared.csproj" />
     <ProjectReference Include="..\PublicWorkflow.Infrastructure\PublicWorkflow.Infrastructure.csproj" />

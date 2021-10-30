@@ -1,0 +1,51 @@
+name: .NET
+
+on:
+  push:
+    branches: [ Dev-Deploy ]
+  pull_request:
+    branches: [ Dev-Deploy ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: dotnet Publish
+      run: dotnet publish src -c Release -o deploy
+      #substitute production appsettings entries to appsettings json file
+    - name: App Settings Variable Substitution
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: 'appsettings.json'
+      env:
+        ConnectionStrings.ApplicationConnection: ${{ secrets.DEFAULT }}
+        ConnectionStrings.IdentityConnection: ${{ secrets.IDENTITY }}
+        ConnectionStrings.HangfireConnection: ${{ secrets.HANGFIRE }}
+    - name: Copy via ssh
+      uses: garygrossgarten/github-action-scp@v0.5.3
+      with:
+        local: /home/runner/work/Generic_Workflow/Generic_Workflow/src/deploy/
+        remote: ${{ secrets.REMOTE_TARGET }}
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY }}
+    - name: Run SSH command
+      uses: garygrossgarten/github-action-ssh@v0.3.0
+      with:
+        command: sudo service needProof start
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY }}

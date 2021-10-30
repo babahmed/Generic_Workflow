@@ -22,7 +22,7 @@ jobs:
       working-directory: PublicWorkflow/PublicWorkflow.Api
     - name: Build
       run: dotnet build --no-restore
-      working-directory: PublicWorkflow/PublicWorkflow.Api
+      working-directory: PublicWorkflow
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: dotnet Publish

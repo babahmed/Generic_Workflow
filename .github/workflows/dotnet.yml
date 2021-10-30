@@ -27,6 +27,7 @@ jobs:
     # run: dotnet test --no-build --verbosity normal
     - name: dotnet Publish
       run: dotnet publish src -c Release -o deploy
+      working-directory: PublicWorkflow/PublicWorkflow.Api
       #substitute production appsettings entries to appsettings json file
     - name: App Settings Variable Substitution
       uses: microsoft/variable-substitution@v1

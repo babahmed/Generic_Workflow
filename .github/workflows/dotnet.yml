@@ -23,8 +23,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: PublicWorkflow
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    #- name: Test
+    # run: dotnet test --no-build --verbosity normal
     - name: dotnet Publish
       run: dotnet publish src -c Release -o deploy
       #substitute production appsettings entries to appsettings json file

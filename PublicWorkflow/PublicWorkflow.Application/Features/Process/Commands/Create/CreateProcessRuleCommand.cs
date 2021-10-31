@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.Results;
 using AutoMapper;
 using MediatR;
+using PublicWorkflow.Application.Extensions;
 using PublicWorkflow.Application.Features.Queries.GetAllPaged;
 using PublicWorkflow.Application.Interfaces.Repositories;
 using PublicWorkflow.Domain.Entities.Catalog;
@@ -34,15 +35,18 @@ namespace PublicWorkflow.Application.Features.Commands.Create
 
         public async Task<Result<long>> Handle(CreateProcessRuleCommand request, CancellationToken cancellationToken)
         {
-            var existing = await _processRuleRepository.GetAsync(c => c.ProcessConfigId == request.ProcessConfigId 
-            && c.Name==request.Name 
+            var type = request.Type.ToEnum<RuleType>();
+            var cond = request.Condition.ToEnum<Rulecondition>();
+            var action = request.Action.ToEnum<RuleAction>();
+            var existing = await _processRuleRepository.GetAsync(c => c.ProcessConfigId == request.ProcessConfigId
+            && c.Name == request.Name
             && !c.IsDeleted
-            && c.Type.ToString() == request.Type
-            && c.Condition.ToString() == request.Condition
-            && c.Action.ToString() == request.Action
+            && c.Type == type
+            && c.Condition == cond
+            && c.Action == action
             );
 
-            if (existing==null)
+            if (existing!=null)
             {
                 return Result<long>.Fail("Rule type already exist");
             }

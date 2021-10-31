@@ -65,8 +65,10 @@ namespace PublicWorkflow.Application.Mappings
                 .ForMember(dest => dest.Action, opt => opt.MapFrom(src => src.Action.ToEnum<RuleAction>()))
                 .ReverseMap();
             //CreateMap<GetAllApprovalConfigResponse, ApprovalConfig>().ReverseMap();
-            CreateMap<List<CreateProcessRuleCommand>, List<ProcessRule>>().ReverseMap();
-            CreateMap<List<CreateApprovalRuleCommand>, List<ApprovalRule>>().ReverseMap();
+            CreateMap<IEnumerable<GetAllProcessRuleResponse>, IEnumerable<ProcessRule>>().ReverseMap();
+            CreateMap<List<GetAllProcessRuleResponse>, List<ProcessRule>>().ReverseMap();
+            CreateMap<List<GetAllApprovalRuleResponse>, List<ApprovalRule>>().ReverseMap();
+            CreateMap<IEnumerable<GetAllApprovalRuleResponse>, IEnumerable<ApprovalRule>>().ReverseMap();
             //CreateMap<GetApprovalConfigByIdResponse, ApprovalConfig>().ReverseMap();
             //CreateMap<ApprovalConfigBase, CreateApprovalConfigCommand>().ReverseMap();
             //CreateMap<List<ApprovalConfigBase>, List<CreateApprovalConfigCommand>>().ReverseMap();

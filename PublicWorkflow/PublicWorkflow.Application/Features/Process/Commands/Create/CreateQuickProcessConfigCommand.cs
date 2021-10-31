@@ -47,8 +47,8 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         public async Task<Result<long>> Handle(CreateQuickProcessConfigCommand request, CancellationToken cancellationToken)
         {
             var config = _mapper.Map<ProcessConfig>(request);
-            config.OrganizationId = _user.OId;
-            config.UserId = _user.UId;
+            config.OrganizationId = _user?.OId;
+            config.UserId = _user?.UId;
             config.RequiredApprovalLevels = request.ApprovalLevels.Count;
 
             await _ProcessConfigRepository.AddAsync(config);

@@ -1,18 +1,18 @@
-﻿namespace PublicWorkflow.Application.Features.Queries.GetById
+﻿using PublicWorkflow.Application.Features.Queries.GetAllPaged;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace PublicWorkflow.Application.Features.Queries.GetById
 {
     public class GetApprovalConfigByIdResponse
     {
         public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int RequiredApprovalLevels { get; set; }
-        public string PublishType { get; set; }
-        public string FeedBackUrl { get; set; }
-        public bool SingleRejection { get; set; }
-        public bool NotifyAllApproverOnApproval { get; set; }
-        public bool NotifyInitiatorOnApproval { get; set; }
-        public bool AttachApprovalPdf { get; set; }
-        public bool IncludeApproverDetails { get; set; }
-        public bool RequiresAllLevelsForRejection { get; set; }
+        public long ProcessConfigId { get; set; }
+        public int Level { get; set; }
+        public int RequiredApprovers { get; set; }
+        public string[] Approvers { get; set; }
+        public List<GetAllApprovalRuleResponse> Rules { get; set; }
     }
 }

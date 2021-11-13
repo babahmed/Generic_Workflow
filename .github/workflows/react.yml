@@ -1,0 +1,57 @@
+name: Web-Develop
+
+on:
+  push:
+    branches: [ Web-Develop ]
+  pull_request:
+    branches: [ Web-Develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Cache Dependencies
+    - uses: actions/cache@v1
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+        
+    - uses: actions/setup-node@v1.1.0
+      with:
+        node-version: '16.x'
+
+    - name: Install dependencies
+      run: yarn install
+      working-directory: WebUi
+
+    # - name: Run the tests and generate coverage report
+      # run: npm test -- --coverage
+
+    - name: Build
+      run: yarn build:prod
+      working-directory: WebUi
+
+    - name: Copy via ssh
+      uses: garygrossgarten/github-action-scp@v0.5.3
+      with:
+        local: /home/runner/work/Generic_Workflow/Generic_Workflow/WebUi/build
+        remote: ${{ secrets.REMOTE_TARGET_WEB }}
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        password: ${{ secrets.REMOTE_PASSWORD }}

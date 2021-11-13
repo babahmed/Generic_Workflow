@@ -30,8 +30,12 @@ jobs:
         path: '**/node_modules'
         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
-    - name: Install dependencies
-      run: yarn install --immutable --immutable-cache --check-cache
+    - name: Install dependencies    
+      run: |
+        yarn
+        yarn test
+      env:
+        CI: true
       working-directory: WebUi
 
     # - name: Run the tests and generate coverage report

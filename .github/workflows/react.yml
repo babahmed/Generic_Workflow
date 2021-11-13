@@ -33,11 +33,12 @@ jobs:
 
     - name: Build
       run: yarn build
+      working-directory: WebUi
 
     - name: Copy via ssh
       uses: garygrossgarten/github-action-scp@v0.5.3
       with:
-        local: /home/runner/work/Generic_Workflow/Generic_Workflow/PublicWorkflow/PublicWorkflow.Api/bin/Debug/net5.0/publish/
+        local: /home/runner/work/Generic_Workflow/Generic_Workflow/WebUi/build
         remote: ${{ secrets.REMOTE_TARGET_WEB }}
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USER }}

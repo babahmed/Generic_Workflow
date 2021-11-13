@@ -26,6 +26,7 @@ jobs:
 
     - name: Install dependencies
       run: yarn install
+      working-directory: WebUi
 
     # - name: Run the tests and generate coverage report
       # run: npm test -- --coverage

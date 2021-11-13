@@ -31,7 +31,7 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
     - name: Install dependencies
-      run: yarn install
+      run: yarn install --immutable --immutable-cache --check-cache
       working-directory: WebUi
 
     # - name: Run the tests and generate coverage report

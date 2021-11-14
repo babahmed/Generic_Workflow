@@ -35,7 +35,7 @@ jobs:
       working-directory: WebUi
         
     - name: Install Saas   
-      run: npm install --saveDev node-sass@4.5.3 
+      run: npm install --saveDev node-sass@4.5.3 --legacy-peer-deps
       working-directory: WebUi
 
     - name: Install dependencies    

@@ -31,6 +31,10 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
         
     - name: Remove Package Json   
+      run: rm -rf node_modules package-lock.json 
+      working-directory: WebUi
+        
+    - name: Install Saas   
       run: npm install --saveDev node-sass@4.5.3 
       working-directory: WebUi
 

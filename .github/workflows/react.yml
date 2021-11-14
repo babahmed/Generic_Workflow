@@ -31,18 +31,14 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
     - name: Install dependencies    
-      run: |
-        yarn
-        yarn test
-      env:
-        CI: true
+      run: npm install
       working-directory: WebUi
 
     # - name: Run the tests and generate coverage report
       # run: npm test -- --coverage
 
     - name: Build
-      run: yarn build:prod
+      run: npm run build
       working-directory: WebUi
 
     - name: Copy via ssh

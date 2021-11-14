@@ -31,7 +31,7 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
     - name: Install dependencies    
-      run: npm install
+      run: npm install --save --legacy-peer-deps
       working-directory: WebUi
 
     # - name: Run the tests and generate coverage report

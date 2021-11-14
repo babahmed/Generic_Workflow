@@ -29,6 +29,10 @@ jobs:
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+        
+    - name: Remove Package Json   
+      run: npm install --saveDev node-sass@4.5.3 
+      working-directory: WebUi
 
     - name: Install dependencies    
       run: npm install --save --legacy-peer-deps

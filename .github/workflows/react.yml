@@ -31,9 +31,9 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
     - name: Install dependencies    
-      run: |
+      run: #|
         yarn
-        yarn test
+        #yarn test
       env:
         CI: true
       working-directory: WebUi

@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.13.0]
+        node-version: [14.16.0]
 
     steps:
     - name: Checkout repository
@@ -29,24 +29,20 @@ jobs:
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-        
-    - name: Remove Package Json   
-      run: rm -rf node_modules package-lock.json 
-      working-directory: WebUi
-        
-    - name: Install Saas   
-      run: npm install --saveDev node-sass@4.5.3 --legacy-peer-deps
-      working-directory: WebUi
 
     - name: Install dependencies    
-      run: npm install --save --legacy-peer-deps
+      run: |
+        yarn
+        yarn test
+      env:
+        CI: true
       working-directory: WebUi
 
     # - name: Run the tests and generate coverage report
       # run: npm test -- --coverage
 
     - name: Build
-      run: npm run build
+      run: yarn build:prod
       working-directory: WebUi
 
     - name: Copy via ssh

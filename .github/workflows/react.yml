@@ -42,7 +42,7 @@ jobs:
       # run: npm test -- --coverage
 
     - name: Build
-      run: yarn build:prod
+      run: yarn build
       working-directory: WebUi
 
     - name: Copy via ssh

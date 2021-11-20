@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.Results;
 using Hangfire;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using PublicWorkflow.Application.Interfaces.Repositories;
 using PublicWorkflow.Application.Interfaces.Service;
 using PublicWorkflow.Application.Interfaces.Shared;
@@ -32,21 +33,24 @@ namespace PublicWorkflow.Application.Features.Commands.Update
             private readonly IAuthenticatedUserService _User;
             private readonly IDateTimeService _date;
             private readonly IPublishService _publisher;
+            private readonly IServiceScopeFactory _serviceScopeFactory;
 
             public UpdateLevelCommandHandler(
-                IGenericRepository<ApprovalConfig> _ApprovalConfigRepository,
-                IGenericRepository<ProcessConfig> _ProcessConfigRepository,
+            IGenericRepository<ApprovalConfig> _ApprovalConfigRepository,
+            IGenericRepository<ProcessConfig> _ProcessConfigRepository,
             IGenericRepository<Process> _ProcessRepository,
             IGenericRepository<Approval> _ApprovalRepository,
             IGenericRepository<ProcessRule> _ProcessRuleRepository,
             IGenericRepository<ApprovalRule> _ApprovalRuleRepository,
             IGenericRepository<History> _historyRepository,
+            IServiceScopeFactory _serviceScopeFactory,
             IAuthenticatedUserService _User,
             IProcessService _processService,
             IDateTimeService _date,
             IPublishService _publisher
                 )
             {
+                this._serviceScopeFactory = _serviceScopeFactory;
                 this._ApprovalConfigRepository = _ApprovalConfigRepository;
                 this._ProcessConfigRepository = _ProcessConfigRepository;
                 this._ProcessRepository = _ProcessRepository;
@@ -79,7 +83,7 @@ namespace PublicWorkflow.Application.Features.Commands.Update
                 }
 
                 //check if user already approved in level
-                if (Approval.AlreadyApproved.Contains(_User.UserName))
+                if (Approval.AlreadyActioned.Contains(_User.UserName))
                 {
                     return Result<long>.Fail($"User Already Approved at this level.");
                 }
@@ -93,7 +97,11 @@ namespace PublicWorkflow.Application.Features.Commands.Update
                 }
 
                 //all Checks done... now lets add user to approvers
-                Approval.AlreadyApproved = Approval.AlreadyApproved.Concat(new string[1] { _User.UserName }).ToArray();
+                if (command.Status == Status.Approved)
+                {
+                    Approval.AlreadyApproved = Approval.AlreadyApproved.Concat(new string[1] { _User.UserName }).ToArray();
+                }
+                Approval.AlreadyActioned = Approval.AlreadyActioned.Concat(new string[1] { _User.UserName }).ToArray();
                 Approval.Comments = Approval.Comments.Concat(new string[1] { command.Remark }).ToArray();
 
                 //await _ApprovalRepository.UpdateAsync(Approval);
@@ -117,7 +125,8 @@ namespace PublicWorkflow.Application.Features.Commands.Update
 
                 //Queue the post approval process job
 
-                _processService.PostApproval(command, _User);
+                await TreatPostApprovalBackground(command, _User);
+
                 //Save all updates
 
                 await _ProcessRepository.UpdateAsync(process);
@@ -129,6 +138,19 @@ namespace PublicWorkflow.Application.Features.Commands.Update
                 BackgroundJob.Enqueue(() => _publisher.PublishProcess(process.Id));
 
                 return Result<long>.Success(ApprovalConfig.Id);
+            }
+
+            [DisableConcurrentExecution(60 * 3600)]
+            [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
+            [Queue("tsq_queue")]
+            private async Task TreatPostApprovalBackground(UpdateLevelCommand command, IAuthenticatedUserService user)
+            {
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var _process = scope.ServiceProvider.GetRequiredService<IProcessService>();
+                    await _process.PostApproval(command,user);
+                }
             }
         }
     }

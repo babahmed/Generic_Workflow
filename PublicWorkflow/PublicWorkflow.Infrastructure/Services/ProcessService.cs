@@ -51,19 +51,24 @@ namespace PublicWorkflow.Infrastructure.Services
 
             public async Task PostApproval(UpdateLevelCommand request, IAuthenticatedUserService user)
         {
-            bool Processcomplete;
+            bool Processcomplete=false;
             var logs = new List<History>();
 
             var Approval = await _ApprovalRepository.GetByIdAsync(request.ApprovalId);
             var ApprovalConfig = await _ApprovalConfigRepository.GetByIdAsync(Approval.ApprovalconfigId);
             var process = await _ProcessRepository.GetAsync(c => c.Id == Approval.ProcessId);
+            var processConfig = await _ProcessConfigRepository.GetAsync(c => c.Id == process.ProcessConfigId);
             //Load the level rules
-            var approvalRules = await _ApprovalRuleRepository.GetAllAsync(c => c.ApprovalConfigId == ApprovalConfig.Id);
-            var processRules = await _ProcessRuleRepository.GetAllAsync(c => c.ProcessConfigId == process.Id);
+            var approvalRules = await _ApprovalRuleRepository.GetAllAsync(c => c.ApprovalConfigId == ApprovalConfig.Id && !c.IsDeleted);
+            var processRules = await _ProcessRuleRepository.GetAllAsync(c => c.ProcessConfigId == process.Id && !c.IsDeleted);
 
             //Apply Apporoval level rules
             //if no rule is set....Apply default
-            if (!approvalRules.Any())
+            if (!approvalRules.Any()
+                //or request is rejection and no rejecction rule....Apply default
+                || (request.Status == Status.Rejected && !approvalRules.Where(c=>c.Action==RuleAction.Reject).Any())
+                //or request is approval and no approval rule....Apply default
+                || (request.Status == Status.Approved && !approvalRules.Where(c => c.Action == RuleAction.Approve).Any()))
             {
                 //if request is to reject
                 if (request.Status == Status.Rejected)
@@ -84,6 +89,61 @@ namespace PublicWorkflow.Infrastructure.Services
             }
             else
             {
+                //1 must count means minimum
+                //2 can count means least
+                //3 must user means required
+                //4 can user means suffice
+
+                if (request.Status == Status.Rejected)
+                {
+
+                    if (
+                        //check if we have any approval rule
+                        approvalRules.Where(c=>c.Action==RuleAction.Reject).Any()
+                        &&
+                        //check if we have any count condtion and its satisfied ie minimum count of rejection user requirement
+                        (approvalRules.Where(c => c.Action == RuleAction.Reject && c.Type==RuleType.Count).Any() &&
+                            //Derive the number of people who alreayd rejected
+                            approvalRules.All(c => c.Action == RuleAction.Reject && c.Type == RuleType.Count && int.Parse(c.Values[0]) >= (Approval.AlreadyActioned.Length - Approval.AlreadyApproved.Length)))
+                        &&
+                        //check if we have a users condtion and its satisfied ie least count of rejection user requirement
+                        (approvalRules.Where(c => c.Action == RuleAction.Reject && c.Type == RuleType.User).Any() &&
+                            //Derive the number of people who alreayd rejected
+                            approvalRules.All(c => c.Action == RuleAction.Reject && c.Type == RuleType.User && c.Values.All(c=> Approval.AlreadyApproved.Contains(c))))
+
+                        )
+                    {
+                        Approval.Status = Status.Rejected;
+                        Approval.Treated = true;
+                        Approval.Actioned = _date.NowUtc;
+                    }
+                }
+
+                if (request.Status == Status.Approved)
+                {
+
+                    if (
+                        //check if we have any approval rule
+                        approvalRules.Where(c => c.Action == RuleAction.Approve).Any()
+                        &&
+                        //check if we have any count condtion and its satisfied ie minimum count of approval user requirement
+                        (approvalRules.Where(c => c.Action == RuleAction.Approve && c.Type == RuleType.Count).Any() &&
+                            //Derive the number of people who alreayd rejected
+                            approvalRules.All(c => c.Action == RuleAction.Approve && c.Type == RuleType.Count && int.Parse(c.Values[0]) >= Approval.AlreadyApproved.Length))
+                        &&
+                        //check if we have a users condtion and its satisfied ie least count of approval user requirement
+                        (approvalRules.Where(c => c.Action == RuleAction.Approve && c.Type == RuleType.User).Any() &&
+                            //Derive the number of people who alreayd rejected
+                            approvalRules.All(c => c.Action == RuleAction.Approve && c.Type == RuleType.User && c.Values.All(c => Approval.AlreadyApproved.Contains(c))))
+
+                        )
+                    {
+                        Approval.Actioned = _date.NowUtc;
+                        Approval.Treated = true;
+
+                        //TODO: Implement notification for non concurrent level process
+                    }
+                }
 
             }
 
@@ -92,7 +152,7 @@ namespace PublicWorkflow.Infrastructure.Services
             if (!processRules.Any())
             {
                 //If no rule set on process, apply default
-                if (!processRules.Any())
+                if (Approval.Status==Status.Rejected)
                 {
                     //Update process
                     process.Status = Status.Rejected;
@@ -107,13 +167,34 @@ namespace PublicWorkflow.Infrastructure.Services
                         ApprovalId = Approval.Id
                     });
                 }
+
+                var totalApproved = await _ApprovalRepository.CountAsync(c => c.Status == Status.Approved && c.ProcessId==Approval.ProcessId);
+                if (Approval.Status == Status.Approved && totalApproved+1 == processConfig.RequiredApprovalLevels)
+                {
+                    //Update process
+                    process.Status = Status.Approved;
+                    process.Completed = _date.NowUtc;
+                    Processcomplete = true;
+
+                    logs.Add(new History()
+                    {
+                        Action = Messages.ProcessJob.CompletedRejected,
+                        ProcessId = process.Id,
+                        Username = user.UserName,
+                        ApprovalId = Approval.Id
+                    });
+                }
             }
             else
             {
+                //TODO Implement rule on Process config
 
             }
+
             //Check if Job Level is complete
 
+            await _ApprovalRepository.UpdateAsync(Approval);
+            if (Processcomplete) { await _ProcessRepository.UpdateAsync(process); }
         }
     }
 }

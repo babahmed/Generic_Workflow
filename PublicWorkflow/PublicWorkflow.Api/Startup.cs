@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PublicWorkflow.Api.Extensions;
+using PublicWorkflow.Api.Filter;
 using PublicWorkflow.Api.Middlewares;
 using PublicWorkflow.Application.Extensions;
 using PublicWorkflow.Infrastructure.Extensions;
@@ -38,6 +40,25 @@ namespace PublicWorkflow.Api
                     .Build();
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
+
+            services.AddHangfireServer(
+                c => new BackgroundJobServerOptions
+                {
+                    WorkerCount = 2,
+                    Queues = new[] { "post-action" },
+                });
+            services.AddHangfireServer(
+                c => new BackgroundJobServerOptions
+                {
+                    WorkerCount = 2,
+                    Queues = new[] { "post-action" },
+                });
+            services.AddHangfireServer(
+                c => new BackgroundJobServerOptions
+                {
+                    WorkerCount = 2,
+                    Queues = new[] { "post-action" },
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +68,14 @@ namespace PublicWorkflow.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                //Temporarily expose hangfire
+                Authorization = new[] { new HangfireDashboardAuthorizationFilter() },
+                IgnoreAntiforgeryToken = true
+            });
+            app.UseHangfireDashboard();
             app.UseDatabaseMigrations();
             app.ConfigureSwagger();
             app.UseHttpsRedirection();

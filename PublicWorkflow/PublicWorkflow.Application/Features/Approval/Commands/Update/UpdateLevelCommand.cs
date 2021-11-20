@@ -28,6 +28,7 @@ namespace PublicWorkflow.Application.Features.Commands.Update
             private readonly IGenericRepository<ProcessRule> _ProcessRuleRepository;
             private readonly IGenericRepository<ApprovalRule> _ApprovalRuleRepository;
             private readonly IGenericRepository<History> _historyRepository;
+            private readonly IProcessService _processService;
             private readonly IAuthenticatedUserService _User;
             private readonly IDateTimeService _date;
             private readonly IPublishService _publisher;
@@ -41,6 +42,7 @@ namespace PublicWorkflow.Application.Features.Commands.Update
             IGenericRepository<ApprovalRule> _ApprovalRuleRepository,
             IGenericRepository<History> _historyRepository,
             IAuthenticatedUserService _User,
+            IProcessService _processService,
             IDateTimeService _date,
             IPublishService _publisher
                 )
@@ -51,6 +53,7 @@ namespace PublicWorkflow.Application.Features.Commands.Update
                 this._ApprovalRepository = _ApprovalRepository;
                 this._ProcessRuleRepository = _ProcessRuleRepository;
                 this._ApprovalRuleRepository = _ApprovalRuleRepository;
+                this._processService = _processService;
                 this._User = _User;
                 this._date = _date;
                 this._historyRepository = _historyRepository;
@@ -112,53 +115,9 @@ namespace PublicWorkflow.Application.Features.Commands.Update
                     ApprovalId = Approval.Id
                 });
 
-                #region Post Approval Process
-                bool Processcomplete;
+                //Queue the post approval process job
 
-                //Load the level rules
-                var approvalRules = await _ApprovalRuleRepository.GetAllAsync(c => c.ApprovalConfigId == ApprovalConfig.Id);
-                var processRules = await _ProcessRuleRepository.GetAllAsync(c => c.ProcessConfigId == process.Id);
-
-                //if no rule is set....Apply default
-                if (!approvalRules.Any())
-                {
-                    //Has everyone approved?
-                    if (command.Status == Status.Rejected)
-                    {
-                        //Update Approvals
-                        Approval.Status = Status.Rejected;
-                        Approval.Treated = true;
-                        Approval.Actioned = _date.NowUtc;
-
-
-                        //If no rule set on process, apply default
-                        if (!processRules.Any())
-                        {
-                            //Update process
-                            process.Status = Status.Rejected;
-                            process.Completed = _date.NowUtc;
-                            Processcomplete = true;
-
-                            logs.Add(new History()
-                            {
-                                Action = $"Process Completed ads",
-                                ProcessId = process.Id,
-                                Username = _User.UserName,
-                                ApprovalId = Approval.Id
-                            });
-                        }
-
-                    }
-
-                    //Has everyone approved?
-                    if (ApprovalConfig.Approvers.Length == Approval.AlreadyApproved.Length && command.Status == Status.Approved)
-                    {
-                        Approval.Actioned = _date.NowUtc;
-                        Approval.Treated = true;
-                    }
-                }
-                #endregion
-
+                _processService.PostApproval(command, _User);
                 //Save all updates
 
                 await _ProcessRepository.UpdateAsync(process);

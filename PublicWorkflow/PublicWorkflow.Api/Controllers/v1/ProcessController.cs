@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PublicWorkflow.API.Controllers;
 using PublicWorkflow.Application.Features.Commands.Create;
+using PublicWorkflow.Application.Features.Commands.Update;
 using PublicWorkflow.Application.Features.Queries.GetAllPaged;
 using PublicWorkflow.Domain.Enum;
 using System.Threading.Tasks;
@@ -28,18 +29,25 @@ namespace PublicWorkflow.Api.Controllers.v1
         //}
 
         // POST api/<controller>
-        [HttpPost]
+        [HttpPost, Route("New")]
         public async Task<IActionResult> Post(CreateProcessCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
 
-        ///// <summary>
-        ///// Quick Config creation
-        ///// </summary>
-        ///// <param name="command"></param>
-        ///// <returns></returns>
-        //[HttpPost,Route("QuickConfig")]
+        // POST api/<controller>
+        [HttpPost, Route("Treat")]
+        public async Task<IActionResult> Post(UpdateLevelCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Quick Config creation
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        //[HttpPost, Route("QuickConfig")]
         //public async Task<IActionResult> Post(CreateQuickProcessConfigCommand command)
         //{
         //    return Ok(await _mediator.Send(command));

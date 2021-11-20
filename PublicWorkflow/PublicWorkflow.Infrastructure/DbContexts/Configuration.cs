@@ -39,6 +39,11 @@ namespace PublicWorkflow.Infrastructure.DbContexts
             .HasConversion(
                 v => string.Join('|', v),
                 v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
+            builder
+            .Property(e => e.AlreadyActioned)
+            .HasConversion(
+                v => string.Join('|', v),
+                v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
 
             builder
             .Property(e => e.Comments)

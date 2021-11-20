@@ -15,6 +15,7 @@ namespace PublicWorkflow.Domain.Entities.Catalog
         public long ApprovalconfigId { get; set; }
         public ApprovalConfig ApprovalConfig { get; set; }
         public string[] AlreadyApproved { get; set; }
+        public string[] AlreadyActioned { get; set; }
         public string[] Comments { get; set; }
     }
 }

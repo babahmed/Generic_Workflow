@@ -39,6 +39,7 @@ namespace PublicWorkflow.Api.Extensions
             services.AddTransient<IMailService, SMTPMailService>();
             services.AddTransient<IAuthenticatedUserService, AuthenticatedUserService>();
             services.AddTransient<IPublishService, PublishService>();
+            services.AddTransient<IProcessService, ProcessService>();
         }
 
         public static void AddEssentials(this IServiceCollection services)

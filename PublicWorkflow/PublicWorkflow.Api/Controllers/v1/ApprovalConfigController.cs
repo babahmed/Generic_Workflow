@@ -37,5 +37,27 @@ namespace PublicWorkflow.Api.Controllers.v1
         {
             return Ok(await _mediator.Send(command));
         }
+
+        /// <summary>
+        /// Create rule
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost, Route("Rule")]
+        public async Task<IActionResult> ApprovalRule(CreateApprovalRuleCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Get Approval Rule
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet, Route("Rule")]
+        public async Task<IActionResult> ApprovalRule(GetAllApprovalRuleQuery query)
+        {
+            return Ok(await _mediator.Send(query));
+        }
     }
 }

@@ -1,0 +1,55 @@
+name: Web-Develop
+
+on:
+  push:
+    branches: [ Web-Develop ]
+  pull_request:
+    branches: [ Web-Develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.16.0]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+          
+    - name: Cache Dependencies
+      uses: actions/cache@v2
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+    - name: Install dependencies    
+      run: #|
+        yarn
+        #yarn test
+      env:
+        CI: true
+      working-directory: WebUi
+
+    # - name: Run the tests and generate coverage report
+      # run: npm test -- --coverage
+
+    - name: Build
+      run: yarn build
+      working-directory: WebUi
+
+    - name: Copy via ssh
+      uses: garygrossgarten/github-action-scp@v0.5.3
+      with:
+        local: /home/runner/work/Generic_Workflow/Generic_Workflow/WebUi/build
+        remote: ${{ secrets.REMOTE_TARGET_WEB }}
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        password: ${{ secrets.REMOTE_PASSWORD }}

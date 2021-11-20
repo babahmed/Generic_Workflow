@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
 {
-    public class GetAllApprovalConfigQuery : IRequest<Result<List<GetAllApprovalConfigResponse>>>
+    public class GetAllApprovalConfigQuery : IRequest<PaginatedResult<GetAllApprovalConfigResponse>>
     {
         public string Search { get; set; }
         public long? Level { get; set; }
@@ -27,7 +27,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
         }
     }
 
-    public class GetAllApprovalConfigQueryHandler : IRequestHandler<GetAllApprovalConfigQuery, Result<List<GetAllApprovalConfigResponse>>>
+    public class GetAllApprovalConfigQueryHandler : IRequestHandler<GetAllApprovalConfigQuery, PaginatedResult<GetAllApprovalConfigResponse>>
     {
         private readonly IGenericRepository<ApprovalConfig> _approvalConfigRepository;
         private readonly IMapper _mapper;
@@ -38,7 +38,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
             _mapper = mapper;
         }
 
-        public async Task<Result<List<GetAllApprovalConfigResponse>>> Handle(GetAllApprovalConfigQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<GetAllApprovalConfigResponse>> Handle(GetAllApprovalConfigQuery request, CancellationToken cancellationToken)
         {
             var dataQuery = await _approvalConfigRepository.GetAllAsync(c =>
             (string.IsNullOrEmpty(request.Search)
@@ -48,13 +48,12 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
             &&
             (request.Level == null || c.Level == request.Level)
             );
-            var record = await dataQuery.OrderByDescending(x => x.Id).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+            var record = await dataQuery.OrderByDescending(x => x.Id).ToMappedPaginatedListAsync<ApprovalConfig,GetAllApprovalConfigResponse>(request.PageNumber, request.PageSize,_mapper);
 
 
             record.Message = record.TotalCount > 0 ? "data retrieved ok" : "No data found";
 
-            var mappedConfigs = _mapper.Map<List<GetAllApprovalConfigResponse>>(record);
-            return Result<List<GetAllApprovalConfigResponse>>.Success(mappedConfigs);
+            return record;
         }
     }
 }

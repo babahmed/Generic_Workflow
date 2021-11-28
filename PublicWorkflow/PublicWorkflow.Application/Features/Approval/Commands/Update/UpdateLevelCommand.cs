@@ -142,8 +142,8 @@ namespace PublicWorkflow.Application.Features.Commands.Update
 
             [DisableConcurrentExecution(60 * 3600)]
             [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
-            [Queue("tsq_queue")]
-            private async Task TreatPostApprovalBackground(UpdateLevelCommand command, IAuthenticatedUserService user)
+            [Queue("post-action")]
+            public async Task TreatPostApprovalBackground(UpdateLevelCommand command, IAuthenticatedUserService user)
             {
 
                 using (var scope = _serviceScopeFactory.CreateScope())

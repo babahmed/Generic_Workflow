@@ -9,6 +9,7 @@ namespace PublicWorkflow.Domain.Entities.Catalog
         public string Description { get; set; }
         public int RequiredApprovalLevels { get; set; }
         public bool IsEnabled { get; set; }
+        public bool ProcessLevelsConcurrently { get; set; }
         public virtual ICollection<ApprovalConfig> ApprovalConfigs { get; set; }
         public virtual ICollection<ProcessRequirement> Requirements { get; set; }
         public virtual ICollection<PublishOption> PublishConfigs { get; set; }

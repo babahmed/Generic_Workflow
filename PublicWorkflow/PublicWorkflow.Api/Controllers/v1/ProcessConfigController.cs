@@ -3,6 +3,7 @@ using PublicWorkflow.API.Controllers;
 using PublicWorkflow.Application.Features.Commands.Create;
 using PublicWorkflow.Application.Features.ProcessConfigs.Commands.Update;
 using PublicWorkflow.Application.Features.Queries.GetAll;
+using PublicWorkflow.Application.Features.Queries.GetAllPaged;
 using PublicWorkflow.Application.Features.Queries.GetById;
 using System.Threading.Tasks;
 
@@ -47,6 +48,28 @@ namespace PublicWorkflow.Api.Controllers.v1
         public async Task<IActionResult> Put(UpdateProcessConfigCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Quick Config creation
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost, Route("Rule")]
+        public async Task<IActionResult> ApprovalRule(CreateProcessRuleCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Get Approval Rule
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet, Route("Rule")]
+        public async Task<IActionResult> GetApprovalRules(GetAllProcessRuleQuery query)
+        {
+            return Ok(await _mediator.Send(query));
         }
     }
 }

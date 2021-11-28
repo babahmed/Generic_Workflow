@@ -11,11 +11,39 @@
             <param name="tokenRequest"></param>
             <returns></returns>
         </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ApprovalConfigController.ApprovalRule(PublicWorkflow.Application.Features.Commands.Create.CreateApprovalRuleCommand)">
+            <summary>
+            Create rule
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ApprovalConfigController.ApprovalRule(PublicWorkflow.Application.Features.Queries.GetAllPaged.GetAllApprovalRuleQuery)">
+            <summary>
+            Get Approval Rule
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
         <member name="M:PublicWorkflow.Api.Controllers.v1.ProcessConfigController.Post(PublicWorkflow.Application.Features.Commands.Create.CreateQuickProcessConfigCommand)">
             <summary>
             Quick Config creation
             </summary>
             <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ProcessConfigController.ApprovalRule(PublicWorkflow.Application.Features.Commands.Create.CreateProcessRuleCommand)">
+            <summary>
+            Quick Config creation
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ProcessConfigController.GetApprovalRules(PublicWorkflow.Application.Features.Queries.GetAllPaged.GetAllProcessRuleQuery)">
+            <summary>
+            Get Approval Rule
+            </summary>
+            <param name="query"></param>
             <returns></returns>
         </member>
     </members>

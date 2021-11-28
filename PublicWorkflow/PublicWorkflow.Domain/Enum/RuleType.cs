@@ -6,7 +6,7 @@
     }
     public enum Rulecondition
     {
-        Must = 0, Should, Can
+        Must = 0, Can
     }
     public enum RuleAction
     {

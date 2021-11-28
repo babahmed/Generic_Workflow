@@ -41,24 +41,8 @@ namespace PublicWorkflow.Api
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
 
-            services.AddHangfireServer(
-                c => new BackgroundJobServerOptions
-                {
-                    WorkerCount = 2,
-                    Queues = new[] { "post-action" },
-                });
-            services.AddHangfireServer(
-                c => new BackgroundJobServerOptions
-                {
-                    WorkerCount = 2,
-                    Queues = new[] { "post-action" },
-                });
-            services.AddHangfireServer(
-                c => new BackgroundJobServerOptions
-                {
-                    WorkerCount = 2,
-                    Queues = new[] { "post-action" },
-                });
+            var queues = new string[] { "post-action", "notification", "process" };
+            services.AddHangfireServer(c => c.Queues = queues);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

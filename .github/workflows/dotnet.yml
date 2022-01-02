@@ -1,16 +1,15 @@
+        
 name: .NET
 
 on:
   push:
-    branches: [ Dev-Deploy ]
-  pull_request:
     branches: [ Dev-Deploy ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    timeout-minutes: 2
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -37,18 +36,71 @@ jobs:
         ConnectionStrings.ApplicationConnection: ${{ secrets.DEFAULT }}
         ConnectionStrings.IdentityConnection: ${{ secrets.IDENTITY }}
         ConnectionStrings.HangfireConnection: ${{ secrets.HANGFIRE }}
-    - name: Copy via ssh
-      uses: garygrossgarten/github-action-scp@v0.5.3
-      with:
-        local: /home/runner/work/Generic_Workflow/Generic_Workflow/PublicWorkflow/PublicWorkflow.Api/bin/Debug/net5.0/publish/
-        remote: ${{ secrets.REMOTE_TARGET }}
-        host: ${{ secrets.REMOTE_HOST }}
-        username: ${{ secrets.REMOTE_USER }}
-        password: ${{ secrets.REMOTE_PASSWORD }}
-    - name: Run SSH command
+        # MailSettings.Password: ${{ secrets.MAILPASSWORD }}
+        # otpSettings.EstoreUsername: ${{ secrets.ESTOREUSERNAME }}
+        # otpSettings.EstorePassword: ${{ secrets.ESTOREPASSWORD }}
+        # otpSettings.nigeriabulksmsUsername: ${{ secrets.BULKUSERNAME }}
+        # otpSettings.nigeriabulksmsPassword: ${{ secrets.BULKPASSWORD }}
+        # otpSettings.Caller: ${{ secrets.CALLER }}
+        # Sentry.Dsn: ${{ secrets.SENTRYDNS }}
+    # - uses: actions/upload-artifact@v2
+      # with:
+        # name: my-artifact
+        # path: PropExpert/PropExpert.Api/bin/Debug/net5.0/publish
+    - name: Stop Service Http Port
       uses: garygrossgarten/github-action-ssh@v0.3.0
       with:
-        command: sudo service needProof start
+        command: kill -9 $(lsof -t -i:5000)
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USER }}
-        password: ${{ secrets.REMOTE_PASSWORD }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY}}
+      env:
+        CI: true
+    - name: Stop Service Https Port
+      uses: garygrossgarten/github-action-ssh@v0.3.0
+      with:
+        command: kill -9 $(lsof -t -i:5001)
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY}}
+      env:
+        CI: true
+    - name: Empty Deployment folder
+      uses: garygrossgarten/github-action-ssh@v0.3.0
+      with:
+        command: rm -rf ${{ secrets.REMOTE_TARGET }}/*
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY}}
+      env:
+        CI: true
+    - name: Copy files via scp
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        port: 22
+        key: ${{ secrets.REMOTE_SSH_KEY }}
+        source: "PublicWorkflow/PublicWorkflow.Api/bin/Debug/net5.0/publish/"
+        target: ${{ secrets.REMOTE_TARGET }}
+        strip_components: 6
+    - name: start app
+      uses: garygrossgarten/github-action-ssh@v0.3.0
+      with:
+        command: ${{ secrets.servicecommand }}
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY}}
+      env:
+        CI: true
+    # - name: Restart Service
+      # uses: garygrossgarten/github-action-ssh@v0.3.0
+      # with:
+        # command: sudo service propExpert start
+        # host: ${{ secrets.REMOTE_HOST }}
+        # username: ${{ secrets.REMOTE_USER }}
+        # privateKey: ${{ secrets.REMOTE_SSH_KEY}}
+      # env:
+        # CI: true
+
+

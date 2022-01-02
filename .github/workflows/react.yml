@@ -3,8 +3,6 @@ name: Web-Develop
 on:
   push:
     branches: [ Web-Develop ]
-  pull_request:
-    branches: [ Web-Develop ]
 
 jobs:
   build:

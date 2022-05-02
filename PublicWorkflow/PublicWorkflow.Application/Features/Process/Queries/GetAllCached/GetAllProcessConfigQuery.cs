@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PublicWorkflow.Application.Features.Queries.GetAll
 {
-    public class GetAllProcessConfigQuery : IRequest<Result<PaginatedResult<GetAllProcessConfigResponse>>>
+    public class GetAllProcessConfigQuery : IRequest<PaginatedResult<GetAllProcessConfigResponse>>
     {
         public string Search { get; set; }
         public long? OrganizationId { get; set; }
@@ -27,7 +27,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAll
         }
     }
 
-    public class GetAllProcessConfigQueryHandler : IRequestHandler<GetAllProcessConfigQuery, Result<PaginatedResult<GetAllProcessConfigResponse>>>
+    public class GetAllProcessConfigQueryHandler : IRequestHandler<GetAllProcessConfigQuery, PaginatedResult<GetAllProcessConfigResponse>>
     {
         private readonly IGenericRepository<ProcessConfig> _processConfig;
         private readonly IMapper _mapper;
@@ -40,9 +40,8 @@ namespace PublicWorkflow.Application.Features.Queries.GetAll
             this._user = _user;
         }
 
-        public async Task<Result<PaginatedResult<GetAllProcessConfigResponse>>> Handle(GetAllProcessConfigQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<GetAllProcessConfigResponse>> Handle(GetAllProcessConfigQuery request, CancellationToken cancellationToken)
         {
-
             var dataQuery = await _processConfig.GetAllAsync(c =>
             (string.IsNullOrEmpty(request.Search)
             || c.Description.ToUpper().Contains(request.Search.ToUpper())
@@ -69,7 +68,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAll
 
             record.Message = record.TotalCount > 0 ? "data retrieved ok" : "No data found";
 
-            return Result<PaginatedResult<GetAllProcessConfigResponse>>.Success(record);
+            return record;
         }
     }
 }

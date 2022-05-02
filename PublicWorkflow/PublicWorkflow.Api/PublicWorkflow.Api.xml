@@ -23,7 +23,7 @@
             Get Approval Rule
             </summary>
             <param name="query"></param>
-            <returns></returns>
+            <returns> </returns>
         </member>
         <member name="M:PublicWorkflow.Api.Controllers.v1.ProcessConfigController.Post(PublicWorkflow.Application.Features.Commands.Create.CreateQuickProcessConfigCommand)">
             <summary>

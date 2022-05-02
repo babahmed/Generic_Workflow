@@ -43,6 +43,7 @@ namespace PublicWorkflow.Api
                 {
                     var services = scope.ServiceProvider;
                     services.GetService<IdentityContext>().Database.Migrate();
+                    services.GetService<ApplicationDbContext>().Database.Migrate();
                     try
                     {
                        // Serilog.Log.Information($"Attempting to seed data");
@@ -53,8 +54,9 @@ namespace PublicWorkflow.Api
                         await Infrastructure.Identity.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
                         await Infrastructure.Identity.Seeds.DefaultSuperAdminUser.SeedAsync(userManager, roleManager);
                         await Infrastructure.Identity.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
-                       // Serilog.Log.Information("Finished Seeding Default Data");
-                       // Serilog.Log.Information($"Starting up {ApplicationName}");
+                        await Infrastructure.DbContexts.DataInitializer.InitializeDatabaseAsync(services);
+                        // Serilog.Log.Information("Finished Seeding Default Data");
+                        // Serilog.Log.Information($"Starting up {ApplicationName}");
                     }
                     catch (Exception ex)
                     {

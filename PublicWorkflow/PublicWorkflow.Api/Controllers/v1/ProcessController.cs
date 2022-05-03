@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using PublicWorkflow.API.Controllers;
 using PublicWorkflow.Application.Features.Commands.Create;
@@ -7,7 +9,9 @@ using PublicWorkflow.Application.Features.Queries.GetAllPaged;
 using PublicWorkflow.Domain.Enum;
 using System.Threading.Tasks;
 using AspNetCoreHero.Results;
+using EnumsNET;
 using Microsoft.AspNetCore.Http;
+using PublicWorkflow.Application.DTOs.ViewModel;
 using PublicWorkflow.Application.Features.Queries.GetAll;
 using PublicWorkflow.Domain.Entities.Catalog;
 
@@ -53,6 +57,14 @@ namespace PublicWorkflow.Api.Controllers.v1
         public async Task<IActionResult> Post(UpdateLevelCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+
+        [HttpGet, Route("Status")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<IEnumerable<DropDown>>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult RuleActions()
+        {
+            return Ok(Result<IEnumerable<DropDown>>.Success(Enum.GetValues(typeof(Status)).Cast<Status>().Select(c => new DropDown { Id = (int)c, Name = ((Status)c).AsString(EnumFormat.Description) }), "success"));
         }
 
         /// <summary>

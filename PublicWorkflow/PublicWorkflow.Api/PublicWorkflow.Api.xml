@@ -25,6 +25,24 @@
             <param name="query"></param>
             <returns> </returns>
         </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ApprovalConfigController.RuleTypes">
+            <summary>
+            gets rule type options
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ApprovalConfigController.RuleConditions">
+            <summary>
+            get rule condition options
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PublicWorkflow.Api.Controllers.v1.ApprovalConfigController.RuleActions">
+            <summary>
+            Get rule action options
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:PublicWorkflow.Api.Controllers.v1.ProcessConfigController.Post(PublicWorkflow.Application.Features.Commands.Create.CreateQuickProcessConfigCommand)">
             <summary>
             Quick Config creation

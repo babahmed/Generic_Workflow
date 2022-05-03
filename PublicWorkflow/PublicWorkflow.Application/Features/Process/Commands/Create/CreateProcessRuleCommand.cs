@@ -36,7 +36,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
         public async Task<Result<long>> Handle(CreateProcessRuleCommand request, CancellationToken cancellationToken)
         {
             var type = request.Type.ToEnum<RuleType>();
-            var cond = request.Condition.ToEnum<Rulecondition>();
+            var cond = request.Condition.ToEnum<RuleCondition>();
             var action = request.Action.ToEnum<RuleAction>();
             var existing = await _processRuleRepository.GetAsync(c => c.ProcessConfigId == request.ProcessConfigId
             && c.Name == request.Name

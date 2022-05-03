@@ -2,11 +2,11 @@
 {
     public enum RuleType
     {
-        User = 0, Count, Value
+        User = 0, Count
     }
     public enum RuleCondition
     {
-        Must = 0, Can , Greater
+        Must = 0, Can
     }
     public enum RuleAction
     {

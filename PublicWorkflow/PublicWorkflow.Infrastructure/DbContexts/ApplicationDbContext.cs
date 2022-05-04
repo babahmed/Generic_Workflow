@@ -72,18 +72,73 @@ namespace PublicWorkflow.Infrastructure.DbContexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+            builder.HasDefaultSchema("application");
+
             foreach (var property in builder.Model.GetEntityTypes()
             .SelectMany(t => t.GetProperties())
             .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
             {
                 property.SetColumnType("decimal(18,2)");
             }
+
+            //builder.Entity<History>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(History).ToLower());
+            //});
+            //builder.Entity<Process>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(Process).ToLower());
+            //});
+            
+            //builder.Entity<Approval>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(Approval).ToLower());
+            //});
+
+            //builder.Entity<ApprovalConfig>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(ApprovalConfig).ToLower());
+            //});
+
+            //builder.Entity<Organization>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(Organization).ToLower());
+            //});
+
+            //builder.Entity<OrganizationUser>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(OrganizationUser).ToLower());
+            //});
+
+            //builder.Entity<ProcessConfig>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(ProcessConfig).ToLower());
+            //});
+
+            //builder.Entity<ProcessRequirement>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(ProcessRequirement).ToLower());
+            //});
+
+            //builder.Entity<PublishOption>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(PublishOption).ToLower());
+            //});
+            //builder.Entity<ApprovalRule>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(ApprovalRule).ToLower());
+            //});
+            //builder.Entity<ProcessRule>(entity =>
+            //{
+            //    entity.ToTable(name: nameof(ProcessRule).ToLower());
+            //});
+
             builder.ApplyConfiguration(new ProcessConfiguration());
             builder.ApplyConfiguration(new ApprovalconfigConfiguration());
             builder.ApplyConfiguration(new ApprovalConfiguration());
             builder.ApplyConfiguration(new ProcessViewConfiguration());
-            builder.Entity<ProcessView>().ToView(nameof(ProcessView));
-            base.OnModelCreating(builder);
+            builder.Entity<ProcessView>().ToView(nameof(ProcessView).ToLower());
         }
     }
 }

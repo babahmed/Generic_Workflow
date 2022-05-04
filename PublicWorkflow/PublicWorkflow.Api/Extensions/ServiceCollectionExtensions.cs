@@ -120,8 +120,15 @@ namespace PublicWorkflow.Api.Extensions
             }
             else
             {
-                services.AddDbContext<IdentityContext>(options => options.UseNpgsql(configuration["ConnectionStrings:IdentityConnection"]));
-                services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(configuration["ConnectionStrings:ApplicationConnection"], b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                services.AddDbContext<IdentityContext>(options => options
+                    .UseNpgsql(configuration["ConnectionStrings:IdentityConnection"])
+                    .UseSnakeCaseNamingConvention()
+                );
+                services.AddDbContext<ApplicationDbContext>(options => options
+                    .UseNpgsql(configuration["ConnectionStrings:ApplicationConnection"], 
+                        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
+                    .UseSnakeCaseNamingConvention()
+                );
 
                 services.AddHangfire(config => config
                         .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)

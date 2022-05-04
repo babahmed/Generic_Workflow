@@ -53,7 +53,7 @@ namespace PublicWorkflow.Application.Features.Commands.Create
                 found.Values = request.Values ?? found.Values;
                 found.Type = request.Type == null ? request.Type.ToEnum<RuleType>() : found.Type;
                 found.Action = request.Action == null ? request.Action.ToEnum<RuleAction>() : found.Action;
-                found.Condition = request.Condition == null ? request.Condition.ToEnum<Rulecondition>() : found.Condition;
+                found.Condition = request.Condition == null ? request.Condition.ToEnum<RuleCondition>() : found.Condition;
 
                 await _processRuleRepository.UpdateAsync(found);
 

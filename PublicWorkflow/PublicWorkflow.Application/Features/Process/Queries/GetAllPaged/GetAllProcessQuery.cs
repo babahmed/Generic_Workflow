@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
 {
-    public class GetAllProcessQuery : IRequest<Result<PaginatedResult<ProcessView>>>
+    public class GetAllProcessQuery : IRequest<PaginatedResult<ProcessView>>
     {
         public string Search { get; set; }
         public long? Level { get; set; }
@@ -36,7 +36,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
         }
     }
 
-    public class GetAllProcessQueryHandler : IRequestHandler<GetAllProcessQuery, Result<PaginatedResult<ProcessView>>>
+    public class GetAllProcessQueryHandler : IRequestHandler<GetAllProcessQuery, PaginatedResult<ProcessView>>
     {
         private readonly IGenericRepository<ProcessView> _approvalsRepository;
         private readonly IMapper _mapper;
@@ -49,7 +49,7 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
             this._user = _user;
         }
 
-        public async Task<Result<PaginatedResult<ProcessView>>> Handle(GetAllProcessQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<ProcessView>> Handle(GetAllProcessQuery request, CancellationToken cancellationToken)
         {
             IQueryable<ProcessView> dataQuery = null;
 
@@ -119,14 +119,13 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
                 };
 
                 // dataQuery = await _approvalsRepository.GetAllAsync(func);          
-
             }
 
             var record = await dataQuery.OrderByDescending(x => x.Id).ToPaginatedListAsync(request.PageNumber, request.PageSize);
 
             record.Message = record.TotalCount > 0 ? "data retrieved ok" : "No data found";
 
-            return Result<PaginatedResult<ProcessView>>.Success(record, "success");
+            return record;
         }
     }
 }

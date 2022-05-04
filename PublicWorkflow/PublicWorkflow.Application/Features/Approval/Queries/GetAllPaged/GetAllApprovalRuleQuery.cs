@@ -29,18 +29,19 @@ namespace PublicWorkflow.Application.Features.Queries.GetAllPaged
 
     public class GetAllApprovalRuleQueryHandler : IRequestHandler<GetAllApprovalRuleQuery, PaginatedResult<GetAllApprovalRuleResponse>>
     {
-        private readonly IGenericRepository<ApprovalRule> _approvalRuleepository;
+        private readonly IGenericRepository<ApprovalRule> _approvalRuleRepository;
         private readonly IMapper _mapper;
 
-        public GetAllApprovalRuleQueryHandler(IGenericRepository<ApprovalRule> _approvalRuleepository, IMapper mapper)
+        public GetAllApprovalRuleQueryHandler(IGenericRepository<ApprovalRule> approvalRuleRepository, IMapper mapper)
         {
-            this._approvalRuleepository = _approvalRuleepository;
+            
+            _approvalRuleRepository = approvalRuleRepository;
             _mapper = mapper;
         }
 
         public async Task<PaginatedResult<GetAllApprovalRuleResponse>> Handle(GetAllApprovalRuleQuery request, CancellationToken cancellationToken)
         {
-            var dataQuery = await _approvalRuleepository.GetAllAsync(c =>
+            var dataQuery = await _approvalRuleRepository.GetAllAsync(c =>
             c.ApprovalConfigId==request.ApprovalConfigId &&
             (string.IsNullOrEmpty(request.Search)
             || c.Name.ToUpper().Contains(request.Search.ToUpper())

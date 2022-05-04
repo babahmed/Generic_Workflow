@@ -54,14 +54,11 @@ namespace PublicWorkflow.Application.Mappings
             #region Rule
 
             CreateMap<CreateApprovalRuleCommand, ApprovalRule>()
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToEnum<RuleType>()))
-                .ForMember(dest => dest.Condition, opt => opt.MapFrom(src => src.Condition.ToEnum<Rulecondition>()))
-                .ForMember(dest => dest.Action, opt => opt.MapFrom(src => src.Action.ToEnum<RuleAction>()))
                 .ReverseMap();
 
             CreateMap<CreateProcessRuleCommand, ProcessRule>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToEnum<RuleType>()))
-                .ForMember(dest => dest.Condition, opt => opt.MapFrom(src => src.Condition.ToEnum<Rulecondition>()))
+                .ForMember(dest => dest.Condition, opt => opt.MapFrom(src => src.Condition.ToEnum<RuleCondition>()))
                 .ForMember(dest => dest.Action, opt => opt.MapFrom(src => src.Action.ToEnum<RuleAction>()))
                 .ReverseMap();
             //CreateMap<GetAllApprovalConfigResponse, ApprovalConfig>().ReverseMap();

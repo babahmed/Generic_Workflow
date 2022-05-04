@@ -4,7 +4,7 @@
     {
         User = 0, Count
     }
-    public enum Rulecondition
+    public enum RuleCondition
     {
         Must = 0, Can
     }
